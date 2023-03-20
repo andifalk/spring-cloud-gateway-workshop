@@ -22,7 +22,7 @@ A hands-on workshop to build an API-Gateway using the [Spring Cloud Gateway](htt
 
 ## Workshop Tutorial
 
-To follow the hands-on workshop please open the [workshop tutorial](#).
+To follow the hands-on workshop please open the [workshop tutorial](https://andifalk.gitbook.io/spring-cloud-gateway-workshop/).
 
 ## Requirements and Setup
 

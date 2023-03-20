@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: customer-service
+  datasource:
+    hikari:
+      jdbc-url: jdbc:h2:mem:customers
+  jpa:
+    open-in-view: false
+server:
+  port: 9091
+  error:
+    include-stacktrace: never
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'

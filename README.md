@@ -2,22 +2,21 @@
 
 A hands-on workshop to build an API-Gateway using the [Spring Cloud Gateway](https://spring.io/projects/spring-cloud-gateway).
 
-__Table of Contents__
+## Table of Contents
 
-* [Workshop Tutorial](#)
-* [Requirements and Setup](setup)
+* [Workshop Tutorial](#workshop-tutorial)
+* [Prerequisites for Participants](prerequisites)
+* [Requirements and Setup](#requirements-and-setup)
+* [Sample Application Architecture](architecture)
 * [Hands-On Workshop](#hands-on-workshop)
-    * [Intro Labs](#intro-labs)
-        * [Reactive Streams with Spring Reactor in Action](intro-labs/reactive-streams-intro)
-    * [Hands-On Labs](#hands-on-labs)
-        * [Lab 1: Set-Up the API Gateway](lab1)
-        * [Lab 2: Add routings to Microservices](lab2)
-        * [Lab 3: Add authentication using OAuth2/OIDC and JWT](lab3)
-        * [Lab 4: Add resilience using circuite breaker](lab4)
-        * [Lab 5: Add rate limiting](lab5)
-        * [Lab 6: Build a customized filter](lab6)
-        * [Lab 7: Test the gateway functionality](lab7)
-* [Slides of workshop](#)
+  * [Intro Lab](#intro-lab)
+    * [Reactive Streams with Spring Reactor in Action](reactive-playground)
+  * [Hands-On Labs](#hands-on-labs)
+    * [Lab 1: Create a Spring Cloud Gateway application](lab1)
+    * [Lab 2: Configure & Monitor Routes](lab2)
+    * [Lab 3: Rate Limiting and Circuit Breaking](lab3)
+    * [Lab 4: Security - Authentication and TLS/SSL](lab4)
+    * [Lab 5: Build customized filters](lab5)
 * [Feedback](#feedback)
 * [License](#license)
 
@@ -44,19 +43,17 @@ To check system requirements and setup for this workshop please follow the [setu
 
 ## Hands-On Workshop
 
-### Intro Labs
+### Intro Lab
 
 * [Reactive Streams with Spring Reactor in Action](intro-labs/reactive-streams-intro)
 
 ### Hands-On Labs
 
-* [Lab 1: Set-Up the API Gateway](lab1)
-* [Lab 2: Add routings to Microservices](lab2)
-* [Lab 3: Add authentication using OAuth2/OIDC and JWT](lab3)
-* [Lab 4: Add resilience using circuite breaker](lab4)
-* [Lab 5: Add rate limiting](lab5)
-* [Lab 6: Build a customized filter](lab6)
-* [Lab 7: Test the gateway functionality](lab7)
+* [Lab 1: Create a Spring Cloud Gateway application](lab1)
+* [Lab 2: Configure & Monitor Routes](lab2)
+* [Lab 3: Rate Limiting and Circuit Breaking](lab3)
+* [Lab 4: Security - Authentication and TLS/SSL](lab4)
+* [Lab 5: Build customized filters](lab5)
 
 ## Feedback
 

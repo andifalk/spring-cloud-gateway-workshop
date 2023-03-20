@@ -1,8 +1,0 @@
-server:
-  port: 9090
-  error:
-    include-stacktrace: never
-spring:
-  mongodb:
-    embedded:
-      version: '5.0.0'

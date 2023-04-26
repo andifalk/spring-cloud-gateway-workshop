@@ -1,1 +1,1 @@
-# Lab 4: Security - Authentication and TLS/SSL
+# Lab 4: Security - Authentication with JWT

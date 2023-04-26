@@ -12,11 +12,6 @@ A hands-on workshop to build an API-Gateway using the [Spring Cloud Gateway](htt
   * [Intro Lab](#intro-lab)
     * [Reactive Streams with Spring Reactor in Action](reactive-playground)
   * [Hands-On Labs](#hands-on-labs)
-    * [Lab 1: Create a Spring Cloud Gateway application](lab1)
-    * [Lab 2: Configure & Monitor Routes](lab2)
-    * [Lab 3: Rate Limiting and Circuit Breaking](lab3)
-    * [Lab 4: Security - Authentication and TLS/SSL](lab4)
-    * [Lab 5: Build customized filters](lab5)
 * [Feedback](#feedback)
 * [License](#license)
 
@@ -32,7 +27,7 @@ You will need a customized version of the [Spring Authorization Server](https://
 
 The components you will build (and use) look like this:
 
-![Architecture](docs/images/demo-architecture.png)
+![Architecture](/images/demo-architecture.png)
 
 __Please check out the [complete documentation](application-architecture) for the sample application before
 starting with the first hands-on lab__.
@@ -50,16 +45,17 @@ To check system requirements and setup for this workshop please follow the [setu
 ### Hands-On Labs
 
 * [Lab 1: Create a Spring Cloud Gateway application](lab1)
-* [Lab 2: Configure & Monitor Routes](lab2)
+* [Lab 2: Configure & Monitor Routes](lab2/README.md)
 * [Lab 3: Rate Limiting and Circuit Breaking](lab3)
-* [Lab 4: Security - Authentication and TLS/SSL](lab4)
-* [Lab 5: Build customized filters](lab5)
+* [Lab 4: Security - Authentication with JWT](lab4)
+* [Lab 5: Security - TLS/SSL](lab5)
+* [Lab 6: Build customized filters](lab6)
 
 ## Feedback
 
 Any feedback on this hands-on workshop is highly appreciated.
 
-Just send an email to _andreas.falk(at)novatec-gmbh.de_ or contact me via Twitter (_@andifalk_).
+Just email _andreas.falk(at)novatec-gmbh.de_ or contact me via Twitter (_@andifalk_).
 
 ## License
 

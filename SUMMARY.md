@@ -18,5 +18,6 @@
 * [Lab 1: Create a Spring Cloud Gateway application](lab1/README.md)
 * [Lab 2: Configure & Monitor Routes](lab2/README.md)
 * [Lab 3: Rate Limiting and Circuit Breaking](lab3/README.md)
-* [Lab 4: Security - Authentication and TLS/SSL](lab4/README.md)
-* [Lab 5: Build customized filters](lab5/README.MD)
+* [Lab 4: Security - Authentication with JWT](lab4/README.md)
+* [Lab 5: Security - TLS/SSL](lab4/README.md)
+* [Lab 6: Build customized filters](lab5/README.MD)

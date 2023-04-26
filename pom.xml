@@ -67,5 +67,7 @@
 
   <modules>
     <module>reactive-playground</module>
+    <module>microservices/customer-service</module>
+    <module>lab1/api-gateway</module>
 </modules>
 </project>

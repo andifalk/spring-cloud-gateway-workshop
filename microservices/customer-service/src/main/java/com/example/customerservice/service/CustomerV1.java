@@ -1,27 +1,33 @@
 package com.example.customerservice.service;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import com.example.customerservice.entity.CustomerEntity;
 
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
-public class Customer implements Serializable {
+public class CustomerV1 implements Serializable {
 
     private UUID identifier;
-    private @Size(min = 1, max = 50) String firstname;
-    private @Size(min = 1, max = 50) String lastname;
-    private @Email String email;
+    private String firstname;
+    private String lastname;
+    private String email;
 
-    public Customer() {}
+    @SuppressWarnings("unused")
+    public CustomerV1() {}
 
-    public Customer(UUID identifier, String firstname, String lastname, String email) {
+    public CustomerV1(UUID identifier, String firstname, String lastname, String email) {
         this.identifier = identifier;
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
+    }
+
+    public CustomerV1(CustomerEntity customerEntity) {
+        this.identifier = customerEntity.getIdentifier();
+        this.firstname = customerEntity.getFirstname();
+        this.lastname = customerEntity.getLastname();
+        this.email = customerEntity.getEmail();
     }
 
     public UUID getIdentifier() {
@@ -60,8 +66,8 @@ public class Customer implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Customer customer = (Customer) o;
-        return identifier.equals(customer.identifier) && firstname.equals(customer.firstname) && lastname.equals(customer.lastname) && email.equals(customer.email);
+        CustomerV1 customerV1 = (CustomerV1) o;
+        return identifier.equals(customerV1.identifier) && firstname.equals(customerV1.firstname) && lastname.equals(customerV1.lastname) && email.equals(customerV1.email);
     }
 
     @Override
@@ -71,11 +77,16 @@ public class Customer implements Serializable {
 
     @Override
     public String toString() {
-        return "Customer{" +
+        return "CustomerV1{" +
                 "identifier=" + identifier +
                 ", firstname='" + firstname + '\'' +
                 ", lastname='" + lastname + '\'' +
                 ", email='" + email + '\'' +
                 '}';
+    }
+
+    public CustomerEntity toEntity(UUID identifier) {
+        return new CustomerEntity(getIdentifier() == null ? identifier : getIdentifier(),
+                getFirstname(), getLastname(), getEmail(), null);
     }
 }

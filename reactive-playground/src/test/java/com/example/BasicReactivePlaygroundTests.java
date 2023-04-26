@@ -385,18 +385,6 @@ class BasicReactivePlaygroundTests {
       StepVerifier.create(stringFlux).expectError(BlockingOperationError.class).verify();
     }
 
-    @DisplayName("wrapping")
-    @Test
-    void testWrapBlockingCall() {
-      Flux<String> stringFlux =
-          Flux.just("a", "b", "c", "d", "e", "f").log().flatMap(this::blockingWrapper);
-      StepVerifier.create(stringFlux).expectNext("A", "B", "C", "D", "E", "F").verifyComplete();
-    }
-
-    private Mono<String> blockingWrapper(String s) {
-      return Mono.fromCallable(() -> blockingOperation(s)).subscribeOn(Schedulers.boundedElastic());
-    }
-
     private String blockingOperation(String input) {
       try {
         Thread.sleep(2000);

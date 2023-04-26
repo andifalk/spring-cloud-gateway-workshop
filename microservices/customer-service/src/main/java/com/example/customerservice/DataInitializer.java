@@ -1,5 +1,7 @@
 package com.example.customerservice;
 
+import com.example.customerservice.entity.AddressEntity;
+import com.example.customerservice.entity.Country;
 import com.example.customerservice.entity.CustomerEntity;
 import com.example.customerservice.entity.CustomerEntityRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -25,10 +27,11 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         List<CustomerEntity> customers = Stream.of(
-                new CustomerEntity(idGenerator.generateId(), "Bruce", "Wayne", "bruce.wayne@example.com"),
-                new CustomerEntity(idGenerator.generateId(), "Bruce", "Banner", "bruce.banner@example.com"),
-                new CustomerEntity(idGenerator.generateId(), "Peter", "Parker", "peter.parker@example.com"),
-                new CustomerEntity(idGenerator.generateId(), "Clark", "Kent", "clark.kent@example.com")
+                new CustomerEntity(idGenerator.generateId(), "Bruce", "Wayne", "bruce.wayne@example.com",
+                        new AddressEntity(idGenerator.generateId(), "Wayne-Street 1", "11111", "Batman City", Country.GERMANY)),
+                new CustomerEntity(idGenerator.generateId(), "Bruce", "Banner", "bruce.banner@example.com", new AddressEntity(idGenerator.generateId(), "Banner-Street 1", "11111", "Hulk City", Country.GERMANY)),
+                new CustomerEntity(idGenerator.generateId(), "Peter", "Parker", "peter.parker@example.com", new AddressEntity(idGenerator.generateId(), "Parker-Street 1", "11111", "Spiderman City", Country.AUSTRIA)),
+                new CustomerEntity(idGenerator.generateId(), "Clark", "Kent", "clark.kent@example.com", new AddressEntity(idGenerator.generateId(), "Kent-Street 1", "11111", "Superman City", Country.SWITZERLAND))
         ).map(customerEntityRepository::save).toList();
 
     }

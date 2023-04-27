@@ -6,6 +6,11 @@ spring:
       jdbc-url: jdbc:h2:mem:customers
   jpa:
     open-in-view: false
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:9000/oauth2/jwks
 server:
   port: 9091
   error:
@@ -15,3 +20,9 @@ management:
     web:
       exposure:
         include: '*'
+
+logging:
+  level:
+    org:
+      springframework:
+        security: trace

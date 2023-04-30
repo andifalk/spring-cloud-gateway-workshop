@@ -1,0 +1,20 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+participant "Web Browser" as web
+participant "Presentation Layer" as ui
+participant "DB Layer" as dblayer
+database "DB" as db
+
+
+web -> ui: Request#1
+ui --> db: Event with Callback (Event Handler)
+note right: Fixed small \nnumber of \nThreads
+db --> ui: Callback Execution (Event)
+web -> ui: Request#2
+ui --> db: Event with Callback (Event Handler)
+db --> ui: Callback Execution (Event)
+
+@enduml

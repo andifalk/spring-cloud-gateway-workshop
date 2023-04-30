@@ -1,0 +1,23 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+participant "Web Browser" as web
+participant "Presentation Layer" as ui
+participant "DB Layer" as dblayer
+database "DB" as db
+
+
+web -> ui: Request#1
+ui -[#red]> dblayer: Servlet Thread#1 (blocked)
+note right: Thread Pool with \nfinite number \nof threads
+dblayer -> db: Worker Thread#1
+db --> dblayer: Worker Thread#1
+dblayer --[#green]> ui: Servlet Thread#1 (unblocked)
+ui --> web: Response#1
+web -> ui: Request#2
+ui -[#red]> dblayer: Servlet Thread#2 (blocked)
+dblayer -> db: Worker Thread#2
+
+@enduml

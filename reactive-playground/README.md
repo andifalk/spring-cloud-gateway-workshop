@@ -11,4 +11,4 @@ The following resources might be helpful for first steps into the reactive world
 
 This playground contains a starting point to play around with the reactive stuff.
 
-Just execute tests in the class _*BasicReactivePlaygroundTests_ to learn the reactive streams api.
+Just execute tests in the class `BasicReactivePlaygroundTests` to learn the reactive streams api.

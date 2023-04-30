@@ -4,10 +4,17 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: customer-service
+        - id: customers
           uri: http://localhost:9091
           predicates:
-            - Path=/api/v1/{segment}
+            - Path=/api/v1/{segment},/api/v2/{segment}
+        - id: prefixpath_route
+          uri: https://example.org
+          predicates:
+            - Path=/test
+          filters:
+            - RedirectTo=302, https://spring.io
+
 server:
   port: 9090
   error:

@@ -15,9 +15,8 @@
 
 ## Hands-On Labs
 
-* [Lab 1: Create a Spring Cloud Gateway application](lab1/README.md)
-* [Lab 2: Configure & Monitor Routes](lab2/README.md)
-* [Lab 3: Rate Limiting and Circuit Breaking](lab3/README.md)
-* [Lab 4: Security - Authentication with JWT](lab4/README.md)
-* [Lab 5: Security - TLS/SSL](lab5/README.md)
-* [Lab 6: Build customized filters](lab6/README.md)
+* [Lab 1: Routing - Configure & Monitor Gateway Routes](lab1/README.md)
+* [Lab 2: Resilience - Rate Limiting and Circuit Breaking](lab2/README.md)
+* [Lab 3: Security Part 1 - Authentication with JWT](lab3/README.md)
+* [Lab 4: Security Part 2 - TLS/SSL](lab4/README.md)
+* [Lab 5: Customization - Build customized filters](lab5/README.md)

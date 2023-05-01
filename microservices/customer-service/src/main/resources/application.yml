@@ -20,9 +20,12 @@ management:
     web:
       exposure:
         include: '*'
+  health:
+    readinessstate:
+      enabled: true
 
 logging:
   level:
     org:
       springframework:
-        security: trace
+        security: DEBUG

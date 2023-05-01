@@ -9,9 +9,10 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/v1/products")
+@RequestMapping("/api/v1/products")
 public class ProductApi {
 
+    private static final String X_PREMIUM_CUSTOMER_HEADER = "X-Premium-Customer";
     private final ProductService productService;
 
     public ProductApi(ProductService productService) {
@@ -19,7 +20,7 @@ public class ProductApi {
     }
 
     @GetMapping
-    public List<Product> allProducts(@RequestHeader(name = "X-premium-customer", required = false, defaultValue = "false") boolean premium) {
+    public List<Product> allProducts(@RequestHeader(name = X_PREMIUM_CUSTOMER_HEADER, required = false, defaultValue = "false") boolean premium) {
         if (premium) {
             return productService.allProducts();
         } else {

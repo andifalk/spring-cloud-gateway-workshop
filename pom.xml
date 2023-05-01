@@ -69,6 +69,9 @@
     <module>reactive-playground</module>
     <module>microservices/customer-service</module>
     <module>microservices/product-service</module>
-    <module>lab1/api-gateway</module>
+    <module>lab1/initial/api-gateway</module>
+    <module>lab1/solution/api-gateway</module>
+    <module>lab2/initial/api-gateway</module>
+    <module>lab2/solution/api-gateway</module>
 </modules>
 </project>

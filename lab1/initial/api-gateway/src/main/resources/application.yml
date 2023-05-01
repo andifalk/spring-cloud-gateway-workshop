@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: api-gateway
+
+server:
+  port: 9090
+  error:
+    include-stacktrace: never
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    gateway:
+      enabled: true
+    health:
+      show-details: always
+
+logging:
+  level:
+    root: INFO
+    com:
+      example: DEBUG
+    org:
+      springframework:
+        cloud:
+          gateway: TRACE

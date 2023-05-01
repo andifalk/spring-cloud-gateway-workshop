@@ -1,0 +1,59 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: products
+          uri: http://localhost:9092
+          predicates:
+            - Path=/api/v1/products
+        - id: customers
+          uri: http://localhost:9091
+          predicates:
+            - Path=/api/v1/{segment},/api/v2/{segment}
+        - id: customers-hidden
+          uri: http://localhost:9091
+          predicates:
+            - Path=/api/v1/customers/hidden
+            - Cookie=hidden-api,true
+        - id: customers-v1
+          uri: http://localhost:9091
+          predicates:
+           - Weight=customers, 8
+           - Path=/customers
+          filters:
+            - RewritePath=/customers, /api/v1/customers
+        - id: customers-v2
+          uri: http://localhost:9091
+          predicates:
+            - Weight=customers, 2
+            - Path=/customers
+          filters:
+            - RewritePath=/customers, /api/v2/customers
+
+server:
+  port: 9090
+  error:
+    include-stacktrace: never
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    gateway:
+      enabled: true
+    health:
+      show-details: always
+
+logging:
+  level:
+    root: INFO
+    com:
+      example: DEBUG
+    org:
+      springframework:
+        cloud:
+          gateway: TRACE

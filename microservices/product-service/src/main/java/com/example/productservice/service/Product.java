@@ -1,22 +1,17 @@
 package com.example.productservice.service;
 
 import com.example.productservice.entity.ProductEntity;
-import jakarta.persistence.Entity;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
 
-@Entity
-public class Product extends AbstractPersistable<Long> {
+public class Product {
 
-    private @NotNull UUID identifier;
-    private @Size(min = 1, max = 50) String name;
-    private @Size(min = 1, max = 200) String description;
-    private @NotNull BigDecimal price;
+    private UUID identifier;
+    private String name;
+    private String description;
+    private BigDecimal price;
     private boolean premium;
 
     public Product() {
@@ -94,7 +89,7 @@ public class Product extends AbstractPersistable<Long> {
 
     @Override
     public String toString() {
-        return "ProductEntity{" +
+        return "Product{" +
                 "identifier=" + identifier +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +

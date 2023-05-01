@@ -51,9 +51,5 @@ management:
 logging:
   level:
     root: INFO
-    com:
-      example: DEBUG
-    org:
-      springframework:
-        cloud:
-          gateway: TRACE
+    com.example: DEBUG
+    org.springframework.cloud.gateway: DEBUG

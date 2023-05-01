@@ -1,6 +1,11 @@
 spring:
   application:
     name: api-gateway
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:9000/oauth2/jwks
   cloud:
     gateway:
       routes:
@@ -60,9 +65,15 @@ spring:
                   basedOnPreviousValue: false
 
 server:
-  port: 9090
+  port: 8443
   error:
     include-stacktrace: never
+  ssl:
+    enabled: true
+    key-alias: 1
+    key-store-password: changeit
+    key-store: classpath:server-keystore.p12
+    key-store-type: PKCS12
 
 management:
   endpoints:
@@ -78,5 +89,5 @@ management:
 logging:
   level:
     root: INFO
-    com.example: DEBUG
     org.springframework.cloud.gateway: DEBUG
+    org.springframework.security: DEBUG

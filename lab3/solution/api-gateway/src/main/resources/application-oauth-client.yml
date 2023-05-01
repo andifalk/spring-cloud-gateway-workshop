@@ -1,0 +1,49 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          spring:
+            client-id: demo-client-pkce
+            authorization-grant-type: authorization_code
+            client-authentication-method: none
+            redirect-uri: '{baseUrl}/login/oauth2/code/{registrationId}'
+            scope:
+              - openid
+              - profile
+              - email
+        provider:
+          spring:
+            issuer-uri: http://localhost:9000
+            user-name-attribute: name
+  cloud:
+    gateway:
+      routes:
+        - id: products
+          uri: http://localhost:9092
+          predicates:
+            - Path=/api/v1/products
+          filters:
+            - TokenRelay=
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 10
+                redis-rate-limiter.burstCapacity: 10
+                redis-rate-limiter.requestedTokens: 1
+                key-resolver: "#{@productKeyResolver}"
+        - id: customers-v1
+          uri: http://localhost:9091
+          predicates:
+           - Weight=customers, 8
+           - Path=/customers
+          filters:
+            - name: TokenRelay
+            - RewritePath=/customers, /api/v1/customers
+        - id: customers-v2
+          uri: http://localhost:9091
+          predicates:
+            - Weight=customers, 2
+            - Path=/customers
+          filters:
+            - name: TokenRelay
+            - RewritePath=/customers, /api/v2/customers

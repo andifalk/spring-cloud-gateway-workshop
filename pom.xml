@@ -73,5 +73,9 @@
     <module>lab1/solution/api-gateway</module>
     <module>lab2/initial/api-gateway</module>
     <module>lab2/solution/api-gateway</module>
+    <module>lab3/initial/api-gateway</module>
+    <module>lab3/solution/api-gateway</module>
+    <module>lab4/initial/api-gateway</module>
+    <module>lab4/solution/api-gateway</module>
 </modules>
 </project>

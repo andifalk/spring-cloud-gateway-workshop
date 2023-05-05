@@ -162,7 +162,7 @@ Next try to call the new route at http://localhost:9090/api/v1/customers or http
 ### Step 3: Add a route for canary testing of customer service
 
 Now we want to add a route to implement [canary testing (canary release)](https://www.techslang.com/definition/what-is-canary-testing/).
-This technique is used to test new functionality with a small group before generally rolling out thius functionality to all users.
+This technique is used to test new functionality with a small group before generally rolling out this functionality to all users.
 
 In spring cloud gateway this can be done by using the `weight` precondition type. With this you can for example tell the gateway to route 80 percent of requests to the production version V1 of the customers API and 20 percent of requests to the new functionality of the V2 customers API.
 
@@ -375,7 +375,7 @@ With this configuration you can call the following actuator endpoints for gatewa
 | Information about a single route with given id | http://localhost:9090/actuator/gateway/routes/{id}                       |
 | Metrics for the number of defined routes       | http://localhost:9090/actuator/metrics/spring.cloud.gateway.routes.count |
 
-These actuator endpoints are not only very helpful for production but also helps to find out why some routings may not work as expected.
+These actuator endpoints are not only very helpful for production but also helps to find out why some routes may not work as expected.
 You may try these using the web browser or using the postman collection (in the _Actuator_ folder).
 
 ```json

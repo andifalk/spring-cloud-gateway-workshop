@@ -79,29 +79,29 @@ It provides a standard for asynchronous stream processing with non-blocking back
 __Publisher__
 
 ```java
-public interface Publisher<T> {
-    public void subscribe(Subscriber<? super T> s);
+interface Publisher<T> {
+    void subscribe(Subscriber<? super T> s);
 }
 ```
 
 __Subscriber__
 
 ```java
-public interface Subscriber<T> {
+interface Subscriber<T> {
 
-    public void onSubscribe(Subscription s);
-    public void onNext(T t);
-    public void onError(Throwable t);
-    public void onComplete();
+    void onSubscribe(Subscription s);
+    void onNext(T t);
+    void onError(Throwable t);
+    void onComplete();
 }
 ```
 
 __Subscription__
 
 ```java
-public interface Subscription<T> {
-    public void request(long n);
-    public void cancel();
+interface Subscription<T> {
+    void request(long n);
+    void cancel();
 }
 ```
 
@@ -135,14 +135,16 @@ A Reactive Streams Publisher with basic reactive extension operators that emits 
 Using Spring WebFlux a _GET_ request mapping using Spring MVC annotation based programming model looks for example like this:
 
 ```java
-@GetMapping("/books/{bookId}")
-  public Mono<ResponseEntity<BookResource>> getBookById(
-      @PathVariable("bookId") UUID bookId) {
-    return bookService
-        .findById(bookId)
-        .map(bookResourceAssembler::toResource)
-        .map(ResponseEntity::ok)
-        .defaultIfEmpty(ResponseEntity.notFound().build());
+public class BooksApi {
+    @GetMapping("/books/{bookId}")
+    public Mono<ResponseEntity<BookResource>> getBookById(
+            @PathVariable("bookId") UUID bookId) {
+        return bookService
+                .findById(bookId)
+                .map(bookResourceAssembler::toResource)
+                .map(ResponseEntity::ok)
+                .defaultIfEmpty(ResponseEntity.notFound().build());
+    }
 }
 ```
 

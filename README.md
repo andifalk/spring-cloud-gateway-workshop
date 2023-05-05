@@ -36,10 +36,10 @@ The sample application architecture you will build (and use) looks like this:
 ### Hands-On Labs
 
 * [Lab 1: Routing - Configure & Monitor Gateway Routes](lab1/README.md)
-* [Lab 2: Resilience - Rate Limiting and Circuit Breaking](lab2/README.md)
+* [Lab 2: Resilience - Retry, Circuit Breaking and Rate Limiting](lab2/README.md)
 * [Lab 3: Security Part 1 - Authentication with JWT](lab3/README.md)
-* [Lab 4: Security Part 2 - TLS/SSL](lab4/README.md)
-* [Lab 5: Customization - Build customized filters](lab5/README.md)
+* [Lab 4: Security Part 2 - Secure Communication with TLS](lab4/README.md)
+* [Lab 5: Customization - Customized Preconditions & Filters](lab5/README.md)
 
 ## Feedback
 

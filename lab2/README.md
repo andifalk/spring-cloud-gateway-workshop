@@ -1,1 +1,3 @@
-# Lab 2: Configure & Monitor Routes
+# Lab 2: Resilience - Retry, Circuit Breaking and Rate Limiting
+
+

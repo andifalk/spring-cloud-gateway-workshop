@@ -1,4 +1,4 @@
-# Lab 1: Create a Spring Cloud Gateway application
+# Lab 1: Routing - Configure & Monitor Gateway Routes
 
 In this first part we extend an existing Microservice to an OAuth 2.0 and OpenID Connect 1.0 compliant Resource Server.
 

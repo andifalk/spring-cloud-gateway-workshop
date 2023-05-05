@@ -1,1 +1,1 @@
-# Lab 3: Rate Limiting and Circuit Breaking
+# Lab 3: Security Part 1 - Authentication with JWT

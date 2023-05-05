@@ -1,1 +1,2 @@
-# Lab 4: Security - Authentication with JWT
+# Lab 4: Security Part 2 - Secure Communication with TLS
+

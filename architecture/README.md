@@ -19,12 +19,12 @@ These microservices are configured to be reachable via the following URL address
 
 Service URLs:
 
-| Service                         | URL                   |
-|---------------------------------|-----------------------|
-| Spring Authorization Server     | http://localhost:9000 |
-| Spring Cloud Gateway            | http://localhost:9090 |
-| Customer Service (Customer API) | http://localhost:9091 |
-| Product Service (Products API)  | http://localhost:9092 |
+| Service                         | URL                   | Secure URL (TLS Lab)   |
+|---------------------------------|-----------------------|------------------------|
+| Spring Authorization Server     | http://localhost:9000 | --                     |
+| Spring Cloud Gateway            | http://localhost:9090 | https://localhost:8443 | 
+| Customer Service (Customer API) | http://localhost:9091 | --                     |
+| Product Service (Products API)  | http://localhost:9092 | https://localhost:8444 |
 
 ## Project contents
 
@@ -35,19 +35,19 @@ After importing the project into your IDE you should see a project structure lik
 The main contents for this workshop consist of the following directories:
 
 * __reactive-playground__:
-  In this sub-directory you find a demo application that provides a unit test class with lots of examples on implementing reactive streams using project reactor.
+  In this subdirectory you find a demo application that provides a unit test class with lots of examples on implementing reactive streams using project reactor.
 * __microservices__:
   Here you find the provided backend microservices, both implemented using Java and Spring Boot and providing a REST API. You find these in the following subdirectories:
     * customer-service
     * product-service
 * __labs__:
-  In this directory you find the workshop lab parts.
-    * initial: This will be the starting point to implement code as part of this workshop
-        - product: This is the provided sample product server microservice
-        - ui: This is the provided sample product ui client microservice
-    * solution: This is the reference solution for this workshop (please do NOT look into this now)
-        - product: This is the reference solution of a OAuth2/OIDC product server microservice
-        - ui: This is the reference solution of a OAuth2/OIDC product ui client microservice
+  In this directory you find several workshop labs. Each lab contains two subdirectories:
+    * __initial__: This is always the starting point for each workshop lab (this way attendees can always jump in with the next lab even if somebody could not finish the previous lab).
+        - api-gateway: This is the initial spring cloud gateway microservice to start the workshop lab
+    * __solution__: This is the reference solution for this workshop (please do NOT look into this now)
+        - api-gateway: This is the reference solution of the corresponding lab for the spring cloud gateway microservice
+
+> **Note:** Lab 5 also contains the product-service microservice as part of the _initial_ and _solution_ folders. This is required as part of the secure communication topic of lab5.
 
 > **Info:** You can find more information on building OAuth 2.0/OIDC secured microservices with spring in
 [Spring Boot Reference Documentation](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-security-oauth2)

@@ -32,6 +32,10 @@ In detail, it provides the following features:
 * Path Rewriting
 * Token Propagation (Authentication)
 
+Clients make requests to Spring Cloud Gateway. If the Gateway Handler Mapping determines that a request matches a route (using a route predicate), it is sent to the Gateway Web Handler. This handler runs the request through a filter chain that is specific to the request. Filters can run logic both before and after the proxy request is sent. First the gateway executes all _pre_-filter logic. Then the proxy request is made. After making the proxy request, the gateway runs the _post_-filter logic for the response.
+
+![How_Spring_Cloud_Gateway_Works](images/how_spring_cloud_gateway_works.png)
+
 The Spring Cloud Gateway is build on [Spring Framework 6](https://spring.io/projects/spring-framework), [Spring WebFlux](https://docs.spring.io/spring-framework/docs/current/reference/html/web-reactive.html#spring-web-reactive) [Project Reactor](https://projectreactor.io/) and [Spring Boot 3](https://spring.io/projects/spring-boot) 
 
 ### Spring WebFlux
@@ -142,7 +146,7 @@ Using Spring WebFlux a _GET_ request mapping using Spring MVC annotation based p
 }
 ```
 
-### How Spring Cloud Gateway Works
+
 
 
 

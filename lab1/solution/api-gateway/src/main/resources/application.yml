@@ -3,6 +3,8 @@ spring:
     name: api-gateway
   cloud:
     gateway:
+      default-filters:
+        - AddResponseHeader=X-My-Default-Response, Default-Value
       routes:
         - id: products
           uri: http://localhost:9092

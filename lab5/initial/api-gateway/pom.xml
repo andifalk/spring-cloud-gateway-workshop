@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>api-gateway-lab5-solution</artifactId>
+	<artifactId>api-gateway-lab5-initial</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
-	<name>api-gateway (solution for lab5</name>
+	<name>api-gateway (initial for lab5</name>
 	<description>API Gateway build with Spring Cloud Gateway</description>
 	<properties>
 		<java.version>17</java.version>

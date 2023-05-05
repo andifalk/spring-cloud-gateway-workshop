@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: product-service
+  datasource:
+    hikari:
+      jdbc-url: jdbc:h2:mem:products
+  jpa:
+    open-in-view: false
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:9000/oauth2/jwks
+server:
+  port: 9092
+  error:
+    include-stacktrace: never
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  health:
+    readinessstate:
+      enabled: true
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG

@@ -8,9 +8,15 @@ spring:
           jwk-set-uri: http://localhost:9000/oauth2/jwks
   cloud:
     gateway:
+      httpclient:
+        ssl:
+          useInsecureTrustManager: false
+          close-notify-flush-timeout: 3000ms
+          close-notify-read-timeout: 0
+          handshake-timeout: 10000ms
       routes:
         - id: products
-          uri: http://localhost:9092
+          uri: https://localhost:8444
           predicates:
             - Path=/api/v1/products
           filters:

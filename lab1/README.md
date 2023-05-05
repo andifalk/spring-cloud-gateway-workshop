@@ -1,13 +1,10 @@
 # Lab 1: Routing - Configure & Monitor Gateway Routes
 
-In this first part we at one of the core features of an API gateway: Routing.
+In this first part we look at one of the core features of an API gateway: **Routing**.
 
 > **Info:**   
 > See [Spring Cloud Gateway Route Predicate Factories Reference Doc](https://docs.spring.io/spring-cloud-gateway/docs/current/reference/html/#gateway-request-predicates-factories) 
 > for all details on how to configure a routing predicates.
-
-__Please check out the [complete documentation](../application-architecture) for the sample application before
-starting with the first hands-on lab (especially the server side parts)__.
 
 ## Lab Contents
 

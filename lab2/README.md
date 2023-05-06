@@ -240,6 +240,8 @@ A rate limiter can support in achieving the following features:
   * DoS and DDoS attacks
 * Limit the number of requests according to a pricing model  
 
+If a request is blocked by the limiter then the response `HTTP 429 - Too Many Requests` is sent.
+
 The standard rate limiter implementation of the spring cloud gateway is the [Redis](https://redis.io/) rate limiter.
 That is why a [Redis](https://redis.io/) database is required.
 
@@ -292,10 +294,50 @@ spring:
 ...
 ```
 
+The rate limiting algorithm used is the [Token Bucket Algorithm](https://dev.to/satrobit/rate-limiting-using-the-token-bucket-algorithm-3cjh).
+The rate limiter defines the following properties:
+
+* __redis-rate-limiter.replenishRate__: Defines how many requests per second to allow (without any dropped requests). This is the rate at which the token bucket is filled.
+* __redis-rate-limiter.burstCapacity__: The maximum number of requests a user is allowed in a single second (without any dropped requests). This is the number of tokens the token bucket can hold. Setting this value to zero blocks all requests.
+* __redis-rate-limiter.requestedTokens__: Defines how many tokens a request costs. This is the number of tokens taken from the bucket for each request and defaults to 1.
+* __rate-limiter__: You can also define your own (optional) implementation of the rate limiter as spring bean.
+* __key-resolver__: An (optional) key resolver defines the key for limiting requests.
+
+> See [RequestRateLimiter reference doc](https://docs.spring.io/spring-cloud-gateway/docs/current/reference/html/#the-requestratelimiter-gatewayfilter-factory) for more details.
+
+As we don't have a Principal (authenticated user) yet (see next lab) it is not possible to use the default `PrincipalNameKeyResolver` implementation of spring cloud gateway.
+Instead, we provide our own simple implementation, limiting the requests based on the request origin address. Our custom resolver is set as bean reference in the configuration above.
+
+Here you find the implementation. Please create a new class `ProductKeyResolver` in the package `com.example.apigateway.resilience`.
+
+ProductKeyResolver.java
+
+```java
+package com.example.apigateway.resilience;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;
+import org.springframework.stereotype.Component;
+import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Mono;
+
+import java.util.Objects;
+
+@Component
+public class ProductKeyResolver implements KeyResolver {
+  private static final Logger LOG = LoggerFactory.getLogger(ProductKeyResolver.class);
+
+  @Override
+  public Mono<String> resolve(ServerWebExchange exchange) {
+    LOG.info("Request from {}", Objects.requireNonNull(exchange.getRequest().getLocalAddress().getHostName()));
+    return Mono.just(Objects.requireNonNull(exchange.getRequest().getLocalAddress().getHostName()));
+  }
+}
+```
 
 Now (re-)start the api-gateway application and make sure you still have started the _product-service_ microservice located in _/microservices/product-service_.
-Next try to call the new route at http://localhost:9090/customers using either the web browser or the provided postman collection (corresponding request in folder _routing_).
-
+Next try to call the new route at http://localhost:9090/api/v1/products using either the web browser or the provided postman collection (corresponding request in folder _routing_).
 
 
 <hr>

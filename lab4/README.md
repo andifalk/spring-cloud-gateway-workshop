@@ -1,48 +1,43 @@
 # Lab 4: Security Part 2 - Secure Communication with TLS
 
+In this lab we secure all communication with HTTPS/TLS between clients and the gateway and in between the gateway and backend services.
 
-In this lab we add token-based (JWT) user authentication to the gateway.
+> See
+> * [Spring Cloud TLS and SSL](https://docs.spring.io/spring-cloud-gateway/docs/current/reference/html/#tls-and-ssl)
+> * [Spring Boot: Configure SSL](https://docs.spring.io/spring-boot/docs/current/reference/html/howto.html#howto.webserver.configure-ssl)
+> * [Transport Layer Security (TLS)](https://www.cloudflare.com/en-gb/learning/ssl/transport-layer-security-tls/)
+>
+> for all details on TLS/SSL with spring cloud gateway, TLS/SSL with Spring Boot and transport layer security (TLS) in general.
 
-> **Info:**   
-> See [Spring Cloud Gateway Retry](https://docs.spring.io/spring-cloud-gateway/docs/current/reference/html/#the-retry-gatewayfilter-factory),[Spring Cloud Gateway CircuitBreaker](https://docs.spring.io/spring-cloud-gateway/docs/current/reference/html/#spring-cloud-circuitbreaker-filter-factory) and [Spring Cloud Gateway RequestRateLimiter](https://docs.spring.io/spring-cloud-gateway/docs/current/reference/html/#the-requestratelimiter-gatewayfilter-factory)
-> for all details on how to configure the corresponding resilience patterns.
 
 ## Lab Contents
 
 * [Learning Targets](#learning-targets)
 * [Folder Contents](#folder-contents)
-* [Tutorial: Resilience - Retry, Circuit Breaking and Rate Limiting](#start-the-lab)
+* [Tutorial: Security Part 2 - Secure Communication with TLS](#start-the-lab)
     * [Explore the initial gateway application](#explore-the-initial-application)
-    * [Step 1: Retry calling the customer-service](#step-1-retry-the-request-call-to-the-customer-service)
+    * [Step 1: Secure communication to the gateway with TLS](#step-1-retry-the-request-call-to-the-customer-service)
+    * [Step 2: Secure communication between the gateway and product service with TLS](#step-1-retry-the-request-call-to-the-customer-service)
 
 ## Learning Targets
 
-One cross-cutting feature of an API Gateway is user authentication. This way the gateway can block calls without valid authentication before the call hits the backend service.
-When talking about authentication in context of Microservices architectures the standard way is token-based authentication with tokens getting issued using OAuth & OpenID Connect standard protocols.
+Another cross-cutting feature of an API Gateway is TLS/SSL termination. This way the gateway all communications from clients to backend services are secured at least on its way to the gateway.
 
-In general Spring Cloud Gateway can act in two different roles:
+In a modern [zero-trust](https://www.ssl.com/blogs/zero-trust-architecture-a-brief-introduction/) approach it is strongly recommended to secure all communication regardless of the network location. So in addition to TLS/SSL termination at the gateway all calls from the gateway to proxied backend services must use secure communication using TLS/SSL.
 
-* As OAuth client:  
-  In this scenario, first the gateway checks if the incoming request is already authenticated (i.e. having valid bearer token). If no valid authentication is detected then it will initiate an OAuth/OpenID Connect authorization code grant flow to get a token.
-* As OAuth resource server:  
-  Here, the gateway just checks the incoming request if it is authenticated (having a valid token). If authentication is valid it propagates the same token to the backend service call.
+In lab 4 you will learn how to:
 
-In lab 3 you will learn how to:
+* Configure the gateway to provide the HTTPS protocol instead of HTTP using a trusted self-signed certificate
+* Configure one of the backend services as well to use TLS/SSL and change the gateway routes to call the HTTPS endpoints
 
-* Configure the gateway to validate incoming JSON web tokens (JWT) issued by the spring authorization server
-* Re-configure the [rate limiter](https://www.cloudflare.com/en-gb/learning/bots/what-is-rate-limiting/) of lab 2 to use the standard user principle based key resolver instead of our custom one.
-
-In the reference solution you'll find both scenarios described above. Just start the reference solution in _/lab3/solution/api-gateway_ with the corresponding spring profile:
-
-* oauth-client: This profile configures the gateway as OAuth client. To use this make a request using the web browser to see the gateway redirecting to the spring authorization server to get a token before making the backend service call
-* resource-server: This profile configures the gateway as OAuth resource server. This is the solution to the steps we will implement as part of this lab
+In this lab you find both the api-gateway and the product-service in the _initial_ and _solution_ folders as we also will change the product-service as part of this lab.
 
 ## Folder Contents
 
 In the lab 2 folder you find 2 applications:
 
-* __initial__: This is the gateway application we will use as starting point for this lab
-* __solution__: This is the completed reference solution of the gateway application for this lab including both scenarios acting as OAuth client or OAuth resource server
+* __initial__: This includes the gateway and product-service applications we will use as starting point for this lab
+* __solution__: This is the completed reference solution of the gateway and product-service applications for this lab configured using TLS/SSL secured communication
 
 ## Start the Lab
 
@@ -50,22 +45,19 @@ Now, let's start with this lab.
 
 ### Explore the initial application
 
-Please navigate your Java IDE to the __lab3/initial/api-gateway__ project and explore this project a bit. Then start the application by running the class `com.example.apigateway.ApiGatewayApplication` inside your IDE or by issuing a `mvnw[.sh|.cmd] spring-boot:run` command.
+Please navigate your Java IDE to the __lab4/initial/api-gateway__ project and explore this project a bit. Then start the application by running the class `com.example.apigateway.ApiGatewayApplication` inside your IDE or by issuing a `mvnw[.sh|.cmd] spring-boot:run` command.
 
 If you have not yet seen the sample application architecture we will be building starting with this lab then please look into the [sample application architecture](../architecture).
 
-For this lab we will also need the two provided sample backend services that you can find in the _microservices_ root folder:
+In this lab the two provided sample backend services in the _microservices_ root folder will not be required.
+Instead, we will use the product-service in the _initial_ folder.
 
-* product-service: Provides a REST API for products
-* customer-service: Provides a REST API for customers
+To test if the product-service backend microservice applications works as expected, please run the corresponding spring boot starter class.
 
-To test if the backend microservice applications works as expected, please run the corresponding spring boot starter classes.
-
-> __Note:__ This time please start both applications using the `secure` spring profile. By using this profile the applications now require a valid JWT to call API endpoints
+> __Note:__ Again please start the application using the `secure` spring profile. By using this profile the application now require a valid JWT to call API endpoints
 
 After starting the applications please check if you can access the following REST API endpoints via the browser or the provided postman collection in _/setup/postman_.
 
-* [localhost:9092/api/v1/products](http://localhost:9091/api/v1/customers)
 * [localhost:9092/api/v1/products](http://localhost:9092/api/v1/products)
 
 You may also use a command-line client as well.
@@ -73,13 +65,11 @@ Here are example requests using _httpie_ and _curl_.
 
 Httpie:
 ```shell
-http localhost:9091/api/v1/customers
 http localhost:9092/api/v1/products
 ``` 
 
 Curl:
 ```shell
-curl http://localhost:9091/api/v1/customers
 curl http://localhost:9092/api/v1/products
 ```
 
@@ -90,7 +80,7 @@ Finally, please also make sure you have also set up and started the spring autho
 
 <hr>
 
-### Step 1: Extend the gateway to act as OAuth resource server
+### Step 1: Configure the gateway to communicate via HTTPS (TLS/SSL)
 
 In the first step of this lab we will extend the gateway to act as [OAuth2 resource server](https://www.oauth.com/oauth2-servers/the-resource-server/).
 
@@ -175,7 +165,7 @@ public class WebSecurityConfiguration {
 }
 ```
 
-### Step 2: Re-configure the rate limiter of lab 2
+### Step 2: Configure the product-service to communicate via HTTPS (TLS/SSL)
 
 As we now have a Principal (authenticated user) it is now possible to use the default `PrincipalNameKeyResolver` implementation of spring cloud gateway.
 

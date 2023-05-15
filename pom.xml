@@ -67,6 +67,7 @@
 
   <modules>
     <module>reactive-playground</module>
+    <module>rate-limiter-client</module>
     <module>microservices/customer-service</module>
     <module>microservices/product-service</module>
     <module>lab1/initial/api-gateway</module>

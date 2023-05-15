@@ -1,0 +1,1099 @@
+{
+	"info": {
+		"_postman_id": "263c2e49-d327-4bc1-a2eb-c56d5b150331",
+		"name": "Spring Cloud Gateway Workshop",
+		"description": "# Spring Cloud Gateway Workshop\n\nThis collection contains all corresponding requests supporting the hands-on labs of the workshop.\n\nPlease see [https://andifalk.gitbook.io/spring-cloud-gateway-workshop](https://andifalk.gitbook.io/spring-cloud-gateway-workshop) for workshop details.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "7267364"
+	},
+	"item": [
+		{
+			"name": "Actuator",
+			"item": [
+				{
+					"name": "Actuators",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_base_url}}/actuator",
+							"host": [
+								"{{gateway_base_url}}"
+							],
+							"path": [
+								"actuator"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Health",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_base_url}}/actuator/health",
+							"host": [
+								"{{gateway_base_url}}"
+							],
+							"path": [
+								"actuator",
+								"health"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Gateway Routes Count",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_base_url}}/actuator/metrics/spring.cloud.gateway.routes.count",
+							"host": [
+								"{{gateway_base_url}}"
+							],
+							"path": [
+								"actuator",
+								"metrics",
+								"spring.cloud.gateway.routes.count"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Gateway Routes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_base_url}}/actuator/gateway/routes",
+							"host": [
+								"{{gateway_base_url}}"
+							],
+							"path": [
+								"actuator",
+								"gateway",
+								"routes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Gateway Route",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_base_url}}/actuator/gateway/routes/customers",
+							"host": [
+								"{{gateway_base_url}}"
+							],
+							"path": [
+								"actuator",
+								"gateway",
+								"routes",
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Gateway Global Filters",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_base_url}}/actuator/gateway/globalfilters",
+							"host": [
+								"{{gateway_base_url}}"
+							],
+							"path": [
+								"actuator",
+								"gateway",
+								"globalfilters"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Gateway Route Filters",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_base_url}}/actuator/gateway/routefilters",
+							"host": [
+								"{{gateway_base_url}}"
+							],
+							"path": [
+								"actuator",
+								"gateway",
+								"routefilters"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Gateway Create Route",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"first_route\",\n  \"predicates\": [{\n    \"name\": \"Path\",\n    \"args\": {\"_genkey_0\":\"/first\"}\n  }],\n  \"filters\": [],\n  \"uri\": \"https://www.uri-destination.org\",\n  \"order\": 0\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{gateway_base_url}}/gateway/routes/first_route",
+							"host": [
+								"{{gateway_base_url}}"
+							],
+							"path": [
+								"gateway",
+								"routes",
+								"first_route"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Gateway Route Cache Refresh",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_base_url}}/actuator/gateway/refresh",
+							"host": [
+								"{{gateway_base_url}}"
+							],
+							"path": [
+								"actuator",
+								"gateway",
+								"refresh"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Circuit Breaker Events",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_base_url}}/actuator/circuitbreakerevents",
+							"host": [
+								"{{gateway_base_url}}"
+							],
+							"path": [
+								"actuator",
+								"circuitbreakerevents"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "# Actuator Requests\n\nThis contains all supported actuator endpoints"
+		},
+		{
+			"name": "Routing",
+			"item": [
+				{
+					"name": "Request/Response Headers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_base_url}}/get",
+							"host": [
+								"{{gateway_base_url}}"
+							],
+							"path": [
+								"get"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Redirect",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_base_url}}/spring",
+							"host": [
+								"{{gateway_base_url}}"
+							],
+							"path": [
+								"spring"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Customers List (V1)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_base_url}}/api/v1/customers",
+							"host": [
+								"{{gateway_base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Products List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_base_url}}/api/v1/products",
+							"host": [
+								"{{gateway_base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Customers List (V2)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_base_url}}/api/v2/customers",
+							"host": [
+								"{{gateway_base_url}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Customers (V1) Hidden Endpoint",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_base_url}}/api/v1/customers/hidden",
+							"host": [
+								"{{gateway_base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"customers",
+								"hidden"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Customers (Canary Release)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_base_url}}/customers",
+							"host": [
+								"{{gateway_base_url}}"
+							],
+							"path": [
+								"customers"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Resilience",
+			"item": [
+				{
+					"name": "Customer Service Retry",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_base_url}}/api/v1/customers/retry",
+							"host": [
+								"{{gateway_base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"customers",
+								"retry"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Rate-Limit-Client",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9096/api/rate?requests=2&delay=0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9096",
+							"path": [
+								"api",
+								"rate"
+							],
+							"query": [
+								{
+									"key": "requests",
+									"value": "2"
+								},
+								{
+									"key": "delay",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Customer-Service",
+			"item": [
+				{
+					"name": "Customers List (V1)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{customer_service_base_url}}/api/v1/customers",
+							"host": [
+								"{{customer_service_base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Customers (V1) Hidden Endpoint",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{customer_service_base_url}}/api/v1/customers/hidden",
+							"host": [
+								"{{customer_service_base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"customers",
+								"hidden"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Customers (V1) Retry Endpoint",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{customer_service_base_url}}/api/v1/customers/retry",
+							"host": [
+								"{{customer_service_base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"customers",
+								"retry"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Customers List (V2)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{customer_service_base_url}}/api/v2/customers",
+							"host": [
+								"{{customer_service_base_url}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"customers"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Product-Service",
+			"item": [
+				{
+					"name": "Non_Premium Products List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{product_service_base_url}}/api/v1/products",
+							"host": [
+								"{{product_service_base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Premium Products List",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Premium-Customer",
+								"value": "true",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{product_service_base_url}}/api/v1/products",
+							"host": [
+								"{{product_service_base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"products"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Security-Authentication",
+			"item": [
+				{
+					"name": "Products List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_base_url}}/api/v1/products",
+							"host": [
+								"{{gateway_base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Customers (Canary Release)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_base_url}}/customers",
+							"host": [
+								"{{gateway_base_url}}"
+							],
+							"path": [
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Customers List (V1)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_base_url}}/api/v1/customers",
+							"host": [
+								"{{gateway_base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Customers List (V2)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_base_url}}/api/v2/customers",
+							"host": [
+								"{{gateway_base_url}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"customers"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "oauth2",
+				"oauth2": [
+					{
+						"key": "client_authentication",
+						"value": "body",
+						"type": "string"
+					},
+					{
+						"key": "scope",
+						"value": "openid profile email",
+						"type": "string"
+					},
+					{
+						"key": "clientSecret",
+						"value": "",
+						"type": "string"
+					},
+					{
+						"key": "clientId",
+						"value": "demo-client-pkce",
+						"type": "string"
+					},
+					{
+						"key": "authUrl",
+						"value": "http://localhost:9000/oauth2/authorize",
+						"type": "string"
+					},
+					{
+						"key": "redirect_uri",
+						"value": "http://localhost:9095/client",
+						"type": "string"
+					},
+					{
+						"key": "tokenName",
+						"value": "workshop",
+						"type": "string"
+					},
+					{
+						"key": "grant_type",
+						"value": "authorization_code_with_pkce",
+						"type": "string"
+					},
+					{
+						"key": "refreshRequestParams",
+						"value": [],
+						"type": "any"
+					},
+					{
+						"key": "tokenRequestParams",
+						"value": [],
+						"type": "any"
+					},
+					{
+						"key": "authRequestParams",
+						"value": [],
+						"type": "any"
+					},
+					{
+						"key": "challengeAlgorithm",
+						"value": "S256",
+						"type": "string"
+					},
+					{
+						"key": "username",
+						"value": "bwayne",
+						"type": "string"
+					},
+					{
+						"key": "password",
+						"value": "wayne",
+						"type": "string"
+					},
+					{
+						"key": "addTokenTo",
+						"value": "header",
+						"type": "string"
+					},
+					{
+						"key": "accessTokenUrl",
+						"value": "http://localhost:9000/oauth2/token",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Security-Authentication + TLS",
+			"item": [
+				{
+					"name": "Products List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_tls_base_url}}/api/v1/products",
+							"host": [
+								"{{gateway_tls_base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Customers (Canary Release)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_tls_base_url}}/customers",
+							"host": [
+								"{{gateway_tls_base_url}}"
+							],
+							"path": [
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Customers List (V1)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_tls_base_url}}/api/v1/customers",
+							"host": [
+								"{{gateway_tls_base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Customers List (V2)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_tls_base_url}}/api/v2/customers",
+							"host": [
+								"{{gateway_tls_base_url}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"customers"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "oauth2",
+				"oauth2": [
+					{
+						"key": "client_authentication",
+						"value": "body",
+						"type": "string"
+					},
+					{
+						"key": "scope",
+						"value": "openid profile email",
+						"type": "string"
+					},
+					{
+						"key": "clientSecret",
+						"value": "",
+						"type": "string"
+					},
+					{
+						"key": "clientId",
+						"value": "demo-client-pkce",
+						"type": "string"
+					},
+					{
+						"key": "authUrl",
+						"value": "http://localhost:9000/oauth2/authorize",
+						"type": "string"
+					},
+					{
+						"key": "redirect_uri",
+						"value": "http://localhost:9095/client",
+						"type": "string"
+					},
+					{
+						"key": "tokenName",
+						"value": "workshop",
+						"type": "string"
+					},
+					{
+						"key": "grant_type",
+						"value": "authorization_code_with_pkce",
+						"type": "string"
+					},
+					{
+						"key": "refreshRequestParams",
+						"value": [],
+						"type": "any"
+					},
+					{
+						"key": "tokenRequestParams",
+						"value": [],
+						"type": "any"
+					},
+					{
+						"key": "authRequestParams",
+						"value": [],
+						"type": "any"
+					},
+					{
+						"key": "challengeAlgorithm",
+						"value": "S256",
+						"type": "string"
+					},
+					{
+						"key": "username",
+						"value": "bwayne",
+						"type": "string"
+					},
+					{
+						"key": "password",
+						"value": "wayne",
+						"type": "string"
+					},
+					{
+						"key": "addTokenTo",
+						"value": "header",
+						"type": "string"
+					},
+					{
+						"key": "accessTokenUrl",
+						"value": "http://localhost:9000/oauth2/token",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Product-Service (TLS)",
+			"item": [
+				{
+					"name": "Non_Premium Products List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{product_tls_service_base_url}}/api/v1/products",
+							"host": [
+								"{{product_tls_service_base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Premium Products List",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Premium-Customer",
+								"value": "true",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{product_tls_service_base_url}}/api/v1/products",
+							"host": [
+								"{{product_tls_service_base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"products"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "oauth2",
+				"oauth2": [
+					{
+						"key": "client_authentication",
+						"value": "body",
+						"type": "string"
+					},
+					{
+						"key": "scope",
+						"value": "openid profile email",
+						"type": "string"
+					},
+					{
+						"key": "clientSecret",
+						"value": "",
+						"type": "string"
+					},
+					{
+						"key": "clientId",
+						"value": "demo-client-pkce",
+						"type": "string"
+					},
+					{
+						"key": "authUrl",
+						"value": "http://localhost:9000/oauth2/authorize",
+						"type": "string"
+					},
+					{
+						"key": "redirect_uri",
+						"value": "http://localhost:9095/client",
+						"type": "string"
+					},
+					{
+						"key": "tokenName",
+						"value": "workshop",
+						"type": "string"
+					},
+					{
+						"key": "grant_type",
+						"value": "authorization_code_with_pkce",
+						"type": "string"
+					},
+					{
+						"key": "refreshRequestParams",
+						"value": [],
+						"type": "any"
+					},
+					{
+						"key": "tokenRequestParams",
+						"value": [],
+						"type": "any"
+					},
+					{
+						"key": "authRequestParams",
+						"value": [],
+						"type": "any"
+					},
+					{
+						"key": "challengeAlgorithm",
+						"value": "S256",
+						"type": "string"
+					},
+					{
+						"key": "username",
+						"value": "bwayne",
+						"type": "string"
+					},
+					{
+						"key": "password",
+						"value": "wayne",
+						"type": "string"
+					},
+					{
+						"key": "addTokenTo",
+						"value": "header",
+						"type": "string"
+					},
+					{
+						"key": "accessTokenUrl",
+						"value": "http://localhost:9000/oauth2/token",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "gateway_base_url",
+			"value": "http://localhost:9090"
+		},
+		{
+			"key": "product_service_base_url",
+			"value": "http://localhost:9092",
+			"type": "string"
+		},
+		{
+			"key": "customer_service_base_url",
+			"value": "http://localhost:9091",
+			"type": "string"
+		},
+		{
+			"key": "gateway_tls_base_url",
+			"value": "https://localhost:8443"
+		},
+		{
+			"key": "product_tls_service_base_url",
+			"value": "https://localhost:8444"
+		}
+	]
+}

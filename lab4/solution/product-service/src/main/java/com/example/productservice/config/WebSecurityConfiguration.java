@@ -15,6 +15,7 @@ public class WebSecurityConfiguration {
     @Bean
     public SecurityFilterChain apiSecurity(HttpSecurity httpSecurity) throws Exception {
          httpSecurity
+                .headers(header -> header.httpStrictTransportSecurity().disable())
                 .authorizeHttpRequests().anyRequest().authenticated()
                 .and().oauth2ResourceServer().jwt();
          return httpSecurity.build();
@@ -24,6 +25,7 @@ public class WebSecurityConfiguration {
     @Bean
     public SecurityFilterChain apiSecurityUnAuthenticated(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
+                .headers(header -> header.httpStrictTransportSecurity().disable())
                 .authorizeHttpRequests().anyRequest().permitAll()
                 .and().oauth2ResourceServer().jwt();
         return httpSecurity.build();

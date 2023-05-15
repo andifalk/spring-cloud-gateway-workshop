@@ -11,9 +11,6 @@ spring:
       httpclient:
         ssl:
           useInsecureTrustManager: false
-          close-notify-flush-timeout: 3000ms
-          close-notify-read-timeout: 0
-          handshake-timeout: 10000ms
       routes:
         - id: products
           uri: https://localhost:8444
@@ -25,7 +22,6 @@ spring:
                 redis-rate-limiter.replenishRate: 10
                 redis-rate-limiter.burstCapacity: 10
                 redis-rate-limiter.requestedTokens: 1
-                key-resolver: "#{@productKeyResolver}"
         - id: customers
           uri: http://localhost:9091
           predicates:
@@ -95,5 +91,6 @@ management:
 logging:
   level:
     root: INFO
+    com.example: DEBUG
     org.springframework.cloud.gateway: DEBUG
-    org.springframework.security: DEBUG
+    org.springframework.security: TRACE

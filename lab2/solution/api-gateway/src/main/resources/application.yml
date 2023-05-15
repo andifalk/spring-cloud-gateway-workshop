@@ -79,4 +79,4 @@ logging:
   level:
     root: INFO
     com.example: DEBUG
-    org.springframework.cloud.gateway: TRACE
+    org.springframework.cloud.gateway: DEBUG

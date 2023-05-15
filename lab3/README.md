@@ -179,6 +179,21 @@ public class WebSecurityConfiguration {
 }
 ```
 
+To get more logging infos for the JWT authentication part (especially when things don't work as expected) you can set the log level to _TRACE_ for spring security with ` org.springframework.security: TRACE`.
+
+__application.yml:__
+
+```yaml
+...
+logging:
+  level:
+    root: INFO
+    com.example: DEBUG
+    org.springframework.cloud.gateway: DEBUG
+    org.springframework.security: TRACE
+```
+
+
 ### Step 2: Re-configure the rate limiter of lab 2
 
 As we now have a Principal (authenticated user) it is now possible to use the default `PrincipalNameKeyResolver` implementation of spring cloud gateway.

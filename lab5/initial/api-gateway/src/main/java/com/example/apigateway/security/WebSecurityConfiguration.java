@@ -18,7 +18,6 @@ public class WebSecurityConfiguration {
     SecurityWebFilterChain actuatorHttpSecurity(ServerHttpSecurity http) {
         http
                 .securityMatcher(new PathPatternParserServerWebExchangeMatcher("/actuator/**"))
-                .headers(header -> header.hsts().disable())
                 .authorizeExchange((exchanges) -> exchanges
                         .anyExchange().permitAll()
                 );
@@ -28,7 +27,6 @@ public class WebSecurityConfiguration {
     @Bean
     SecurityWebFilterChain apiHttpSecurity(ServerHttpSecurity http) {
         http
-                .headers(header -> header.hsts().disable())
                 .authorizeExchange((exchanges) -> exchanges
                         .anyExchange().authenticated()
                 )

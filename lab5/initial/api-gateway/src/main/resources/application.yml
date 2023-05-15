@@ -1,13 +1,67 @@
 spring:
   application:
     name: api-gateway
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:9000/oauth2/jwks
   cloud:
     gateway:
       routes:
+        - id: products
+          uri: http://localhost:9092
+          predicates:
+            - Path=/api/v1/products
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 10
+                redis-rate-limiter.burstCapacity: 10
+                redis-rate-limiter.requestedTokens: 1
         - id: customers
           uri: http://localhost:9091
           predicates:
             - Path=/api/v1/{segment},/api/v2/{segment}
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: myCircuitBreaker
+                fallbackUri: forward:/customer-fallback
+        - id: customers-hidden
+          uri: http://localhost:9091
+          predicates:
+            - Path=/api/v1/customers/hidden
+            - Cookie=hidden-api,true
+        - id: customers-v1
+          uri: http://localhost:9091
+          predicates:
+           - Weight=customers, 8
+           - Path=/customers
+          filters:
+            - RewritePath=/customers, /api/v1/customers
+        - id: customers-v2
+          uri: http://localhost:9091
+          predicates:
+            - Weight=customers, 2
+            - Path=/customers
+          filters:
+            - RewritePath=/customers, /api/v2/customers
+        - id: retry
+          uri: http://localhost:9091
+          predicates:
+            - Path=/api/v1/customers/retry
+          filters:
+            - name: Retry
+              args:
+                retries: 5
+                statuses: BAD_REQUEST, INTERNAL_SERVER_ERROR
+                methods: GET
+                backoff:
+                  firstBackoff: 10ms
+                  maxBackoff: 50ms
+                  factor: 3
+                  basedOnPreviousValue: false
 
 server:
   port: 9090
@@ -28,4 +82,6 @@ management:
 logging:
   level:
     root: INFO
+    com.example: DEBUG
     org.springframework.cloud.gateway: DEBUG
+    org.springframework.security: TRACE

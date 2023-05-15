@@ -9,6 +9,7 @@ The following resources might be helpful for first steps into the reactive world
 
 * [Which operator do I need?](https://projectreactor.io/docs/core/release/reference/#which-operator)
 
-This playground contains a starting point to play around with the reactive stuff.
+This playground contains a starting point to play around with the reactive stuff.  
+Just execute tests in the class `BasicReactivePlaygroundTests` to learn more about the reactive streams api.
 
-Just execute tests in the class `BasicReactivePlaygroundTests` to learn the reactive streams api.
+If you want to learn more about the project reactor and reactive streams you may also want to check another GitHub repository for a [Reactive Spring Security 5 Workshop](https://github.com/andifalk/reactive-spring-security-5-workshop).

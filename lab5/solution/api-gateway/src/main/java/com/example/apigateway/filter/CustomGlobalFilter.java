@@ -15,6 +15,7 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         return chain.filter(exchange)
                 .then(Mono.just(exchange))
+                .log()
                 .map(serverWebExchange -> {
                     //adds header to response
                     serverWebExchange.getResponse().getHeaders().set("CUSTOM-RESPONSE-HEADER",

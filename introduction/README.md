@@ -118,6 +118,8 @@ There are many [Reactive Streams](https://www.reactive-streams.org/) implementat
 * [RxJS](https://rxjs.dev/)
 * [Project Reactor](https://projectreactor.io/)
 
+#### Project Reactor & Spring Webflux 
+
 [Spring WebFlux](https://docs.spring.io/spring-framework/docs/current/reference/html/web-reactive.html#spring-web-reactive) builds upon [Project Reactor](https://projectreactor.io/).
 
 Reactor fully implements [Reactive Streams](https://www.reactive-streams.org/) and extends it by offering two reactive and composable APIs:
@@ -148,6 +150,7 @@ public class BooksApi {
 }
 ```
 
+To get a really fast introduction into reactive streams with project reactor look into the _reactive-playground_ project as part of this workshop or look for the [Reactive Spring Security 5 Workshop](https://github.com/andifalk/reactive-spring-security-5-workshop).
 
 
 

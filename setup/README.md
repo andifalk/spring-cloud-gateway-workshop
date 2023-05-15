@@ -43,3 +43,17 @@ You can use the following users to log into the custom Spring Authorization Serv
 | pparker / parker  | USER, ADMIN |
 | ckent / kent      | USER        |
 
+## Docker and docker compose
+
+If you want to follow configuring a rate limiter as part of hands-on lab 2 you will need to run a container image with a redis database.  
+Therefore a container runtime is required.  
+
+If you don't have already _docker_ installed on your machine please open the corresponding [docker installation](https://docs.docker.com/get-docker/) location and follow instructions there.  
+With Docker Desktop you already have docker compose installed.  Other installations like standalone engine on Linux require an additional [installation of docker compose](https://docs.docker.com/get-started/08_using_compose/).
+
+> In case you have installed another container runtime like [Rancher Desktop](https://rancherdesktop.io/) this should also work, as long as docker compose is supported by that solution.
+
+## mkcert - Create a local Certificate Authority (CA)
+
+[mkcert](https://github.com/FiloSottile/mkcert) is a helpful tool to create a local CA for Lab 4 to configure TLS/SSL for the api gateway.
+Please follow the [mkcert installation](https://github.com/FiloSottile/mkcert#installation) section on how to install this on your local machine.

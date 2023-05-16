@@ -306,51 +306,14 @@ In the second route a redirect is made to the [Spring I/O conference] website.
 Now (re-)start the api-gateway application again. The _customer-service_ microservice is not required anymore for this step.
 Next try to call the new routes at http://localhost:9090/get and http://localhost:9090/spring using either the web browser or the provided postman collection (corresponding request in folder _routing_) and see what is happening.
 
-That is all for routing features in this lab. There are still more features available like [global filters](https://docs.spring.io/spring-cloud-gateway/docs/current/reference/html/#global-filters) and [default filters]. These kind of filters apply to all routes.
-
-Default Filters:
-
-```yaml
-spring:
-  cloud:
-    gateway:
-      default-filters:
-      - AddResponseHeader=X-My-Response-Default, Default-Value
-```
-
-Global Filters:
-
-```java
-@Configuration
-class GlobalFilterConfiguration {
-
-    @Bean
-    public GlobalFilter customFilter() {
-        return new CustomGlobalFilter();
-    }
-
-    public class CustomGlobalFilter implements GlobalFilter, Ordered {
-
-        @Override
-        public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-            log.info("custom global filter");
-            return chain.filter(exchange);
-        }
-
-        @Override
-        public int getOrder() {
-            return -1;
-        }
-    }
-}
-```
+That is all for routing features in this lab. 
 
 ### Step 6: Monitor routes and route metrics
 
-In the last lab we will look at what the spring cloud gateway contributes to the [Spring Boot Actuator](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#actuator).
+In the last step we will look at what the spring cloud gateway contributes to the [Spring Boot Actuator](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#actuator).
 To enable and remotely access the `/gateway` actuator endpoint, in general you have to add some configuration to the `application.yml` file.
 
-application.yml
+__application.yml:__
 
 ```yaml
 management:
@@ -377,6 +340,8 @@ With this configuration you can call the following actuator endpoints for gatewa
 
 These actuator endpoints are not only very helpful for production but also helps to find out why some routes may not work as expected.
 You may try these using the web browser or using the postman collection (in the _Actuator_ folder).
+
+[http://localhost:9090/actuator/gateway/routes](http://localhost:9090/actuator/gateway/routes):
 
 ```json
 [

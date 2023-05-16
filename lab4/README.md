@@ -328,7 +328,7 @@ Now you can run both applications the _api-gateway_ and the _product-service_ an
 
 <hr>
 
-This ends lab 4. In the last [lab 5](../lab5) you will learn how to implement your own customized gateway predicates and filters.
+This ends lab 4. In the last [lab 5](../next-steps) you will learn how to implement your own customized gateway predicates and filters.
 
 If you want to learn more about TLS/SSL and also want to configure client certificates please check another GitHub repository at [https://github.com/andifalk/client-certificate-demo](https://github.com/andifalk/client-certificate-demo).
 
@@ -336,4 +336,4 @@ If you want to learn more about TLS/SSL and also want to configure client certif
 
 <hr>
 
-To continue please head over to [Lab 5](../lab5).
+To continue please head over to [Lab 5](../next-steps).

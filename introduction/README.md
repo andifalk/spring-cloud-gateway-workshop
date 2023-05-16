@@ -32,7 +32,11 @@ In detail, it provides the following features:
 * Path Rewriting
 * Token Propagation (Authentication)
 
-Clients make requests to Spring Cloud Gateway. If the Gateway Handler Mapping determines that a request matches a route (using a route predicate), it is sent to the Gateway Web Handler. This handler runs the request through a filter chain that is specific to the request. Filters can run logic both before and after the proxy request is sent. First the gateway executes all _pre_-filter logic. Then the proxy request is made. After making the proxy request, the gateway runs the _post_-filter logic for the response.
+### How the Gateway works
+
+1. Clients make requests to Spring Cloud Gateway. 
+2. If the _Gateway Handler Mapping_ determines that a request matches a route (using a route predicate), it is sent to the _Gateway Web Handler_. 
+3. The _Gateway Web Handler_ runs the request through a filter chain that is specific to the request. Filters can run logic both before and after the proxy request is sent. First the gateway executes all _pre_-filter logic. Then the proxy request is made. After making the proxy request, the gateway runs the _post_-filter logic for the response.
 
 ![How_Spring_Cloud_Gateway_Works](images/how_spring_cloud_gateway_works.png)
 
@@ -51,7 +55,8 @@ The blocking web stack (Standard Servlet API) blocks one request thread of the w
 
 ![Blocking_Web_Stack](images/blocking_request_processing.png)
 
-In a non-blocking web stack (Spring WebFlux) all incoming requests come with an event handler and callback information. Request thread delegates the incoming requests to a thread pool (generally a small number of threads) which delegates the request to its handler function and immediately starts processing other incoming requests from the request thread.  
+In a non-blocking web stack (_Spring WebFlux_) all incoming requests come with an event handler and callback information. Request thread delegates the incoming requests to a thread pool (generally a small number of threads) which delegates the request to its handler function and immediately starts processing other incoming requests from the request thread.
+
 This way the non-blocking nature of threads helps in scaling the performance of the application. A small number of threads means less memory utilization and less context switching. This model enables web servers to handle much more parallel requests compared to a blocking web stack.
 
 ![Non-Blocking_Web_Stack](images/non_blocking_request_processing.png)
@@ -73,8 +78,8 @@ The system stays responsive under varying workload
 * __Message Driven__:  
 Reactive Systems rely on asynchronous message-passing
 
-[Reactive Streams](https://www.reactive-streams.org/) is an initiative created by engineers from Netflix, Pivotal, Lightbend, RedHat, Twitter and Oracle, amon others.
-It provides a standard for asynchronous stream processing with non-blocking back pressure. The Reactive Streams API defines four interfaces that since Java 9 are also part of the Java API in the [java.util.concurrent.Flow](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/Flow.html) class.
+[Reactive Streams](https://www.reactive-streams.org/) is an initiative created by engineers from Netflix, Pivotal, Lightbend, RedHat, Twitter and Oracle, amon others. It provides a standard for asynchronous stream processing with non-blocking back pressure.  
+The Reactive Streams API defines four interfaces that since Java 9 are also part of the Java API in the [java.util.concurrent.Flow](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/Flow.html) class.
 
 __Publisher__
 
@@ -105,8 +110,10 @@ interface Subscription<T> {
 }
 ```
 
-The __Publisher__ emits a sequence of events to _Subscribers_ according to the demand received from its subscribers. A publisher can serve multiple subscribers.  
+The __Publisher__ emits a sequence of events to _Subscribers_ according to the demand received from its subscribers. A publisher can serve multiple subscribers.
+
 The __Subscriber__ receives and processes events emitted by a _Publisher_.    
+
 The one-to-one relationship between a _Publisher_ and a _Subscriber_ is defined by a __Subscription__. It can only be used once by a single _Subscriber_. It is used to both signal desire for data and cancels demand (and allow resource cleanup).
 
 ![Reactive_Streams](images/reactive_streams_api.png)

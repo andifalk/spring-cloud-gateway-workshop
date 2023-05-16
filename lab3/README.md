@@ -8,7 +8,7 @@ In this lab we add token-based (JWT) user authentication to the gateway.
 > * [OAuth 2.0 (RFC 6749)](https://www.rfc-editor.org/rfc/rfc6749.html)
 > * [JSON Web Tokens (JWT, RFC 7519)](https://www.rfc-editor.org/rfc/rfc7519.html)
 > 
-> for all details on authentication with spring cloud gateway using OAuth 2 and JSON web tokens.
+> for all details on authentication with spring cloud gateway using OAuth 2 and JSON web tokens.  
 
 ## Lab Contents
 
@@ -21,29 +21,29 @@ In this lab we add token-based (JWT) user authentication to the gateway.
 
 ## Learning Targets
 
-One cross-cutting feature of an API Gateway is user authentication. This way the gateway can block calls without valid authentication before the call hits the backend service.
+One cross-cutting feature of an API Gateway is user authentication. This way the gateway can block calls without valid authentication before the call hits the backend service.  
 When talking about authentication in context of Microservices architectures the standard way is token-based authentication with tokens getting issued using [OAuth 2.0](https://www.rfc-editor.org/rfc/rfc6749.html) and [OpenID Connect 1.0](https://openid.net/specs/openid-connect-core-1_0.html) standard protocols.
 
 In general Spring Cloud Gateway can act in two different roles:
 
-* As OAuth client:  
+* As __OAuth client__:  
   In this scenario, first the gateway checks if the incoming request is already authenticated (i.e. having valid bearer token). If no valid authentication is detected then it will initiate an OAuth/OpenID Connect authorization code grant flow to get a token.
-* As OAuth resource server:  
+* As __OAuth resource server__:  
   Here, the gateway just checks the incoming request if it is authenticated (having a valid token). If authentication is valid it propagates the same token to the backend service call.
 
 In lab 3 you will learn how to:
 
-* Configure the gateway to validate incoming JSON web tokens (JWT) issued by the spring authorization server
+* Configure the gateway to validate incoming JSON web tokens (JWT) issued by the Spring Authorization Server
 * Re-configure the [rate limiter](https://www.cloudflare.com/en-gb/learning/bots/what-is-rate-limiting/) of lab 2 to use the standard user principle based key resolver instead of our custom one.
 
 In the reference solution you'll find both scenarios described above. Just start the reference solution in _/lab3/solution/api-gateway_ with the corresponding spring profile:
 
-* oauth-client: This profile configures the gateway as OAuth client. To use this make a request using the web browser to see the gateway redirecting to the spring authorization server to get a token before making the backend service call
-* resource-server: This profile configures the gateway as OAuth resource server. This is the solution to the steps we will implement as part of this lab
+* __oauth-client__: This profile configures the gateway as OAuth client. To use this make a request using the web browser to see the gateway redirecting to the spring authorization server to get a token before making the backend service call
+* __resource-server__: This profile configures the gateway as OAuth resource server. This is the solution to the steps we will implement as part of this lab
 
 ## Folder Contents
 
-In the lab 2 folder you find 2 applications:
+In the lab 3 folder you find 2 applications:
 
 * __initial__: This is the gateway application we will use as starting point for this lab
 * __solution__: This is the completed reference solution of the gateway application for this lab including both scenarios acting as OAuth client or OAuth resource server
@@ -54,22 +54,23 @@ Now, let's start with this lab.
 
 ### Explore the initial application
 
-Please navigate your Java IDE to the __lab3/initial/api-gateway__ project and explore this project a bit. Then start the application by running the class `com.example.apigateway.ApiGatewayApplication` inside your IDE or by issuing a `mvnw[.sh|.cmd] spring-boot:run` command.
+Please navigate your Java IDE to the __lab3/initial/api-gateway__ project and explore this project a bit. Then start the application by running the class `com.example.apigateway.ApiGatewayApplication` inside your IDE  
+or by issuing a `mvnw[.sh|.cmd] spring-boot:run` command.
 
-If you have not yet seen the sample application architecture we will be building starting with this lab then please look into the [sample application architecture](../architecture).
+If you have not yet seen the sample application architecture we will be building then please have a look into the [sample application architecture](../architecture).
 
 For this lab we will also need the two provided sample backend services that you can find in the _microservices_ root folder:
 
-* product-service: Provides a REST API for products
-* customer-service: Provides a REST API for customers
+* __product-service__: Provides a REST API for products
+* __customer-service__: Provides a REST API for customers
 
 To test if the backend microservice applications works as expected, please run the corresponding spring boot starter classes.
 
 > __Note:__ This time please start both applications using the `secure` spring profile. By using this profile the applications now require a valid JWT to call API endpoints
 
-After starting the applications please check if you can access the following REST API endpoints via the browser or the provided postman collection in _/setup/postman_.
+After starting the applications please check if you can access the following REST API endpoints via the browser or the provided postman collection in _/setup/postman_ (requests located in the _Security-Authentication_ folder) .
 
-* [localhost:9092/api/v1/products](http://localhost:9091/api/v1/customers)
+* [localhost:9091/api/v1/customers](http://localhost:9091/api/v1/customers)
 * [localhost:9092/api/v1/products](http://localhost:9092/api/v1/products)
 
 You may also use a command-line client as well.
@@ -87,10 +88,10 @@ curl http://localhost:9091/api/v1/customers
 curl http://localhost:9092/api/v1/products
 ```
 
-You will notice that you are not able to call the REST API endpoints successfully. Instead, you get a 401 (Unauthorized) status.
+You will notice that you are not able to call the REST API endpoints successfully. Instead, you get a `401 (Unauthorized)` HTTP status.
 The same will happen if you try to make the calls through the gateway.
 
-Finally, please also make sure you have also set up and started the spring authorization server as this will be required by the gateway and the backend services to validate the tokens.
+Before proceeding with the lab, please also make sure you have also set up and started the Spring Authorization Server as this will be required by the gateway and the backend services to validate the tokens.
 
 <hr>
 
@@ -100,9 +101,9 @@ In the first step of this lab we will extend the gateway to act as [OAuth2 resou
 
 ![Gateway_As_Resource_Server](images/resource_server.png)
 
-First, we have to add another dependency for the OAuth resource server spring boot starter feature to the maven _pom.xml_ file:
+First, we have to add another dependency for the OAuth resource server spring boot starter feature to the maven `pom.xml` file:
 
-pom.xml
+__pom.xml:__
 
 ```xml
 <dependencies>
@@ -115,13 +116,13 @@ pom.xml
 </dependencies>
 ```
 
-The additional dependency adds the [spring security](https://spring.io/projects/spring-security) library and the filter functionality to resolve and validate [bearer tokens](https://oauth.net/2/bearer-tokens/) from the requests.
-As we will use [JSON web tokens (JWT)](https://jwt.io/) in our lab, these kind of tokens have to be validated by checking the token signature and the expiry date/time. In our case the token signature is based on [asymmetric cryptography](https://en.wikipedia.org/wiki/Public-key_cryptography), so for validating the signature we need a [public key](https://en.wikipedia.org/wiki/Public_key_infrastructure).  
-Next we have to tell the gateway where to retrieve this public key from (it is the spring authorization server that provides this at a publicly accessible endpoint as part of a [JSON Web Key Set](https://auth0.com/docs/secure/tokens/json-web-tokens/json-web-key-sets)).
+The additional dependency adds the [spring security](https://spring.io/projects/spring-security) library and the filter functionality to resolve and validate [bearer tokens](https://oauth.net/2/bearer-tokens/) from the requests.  
+As we will use [JSON web tokens (JWT)](https://jwt.io/) in our lab, these kind of tokens have to be validated by checking the token signature and the expiry date/time. In our case the token signature is based on [asymmetric cryptography](https://en.wikipedia.org/wiki/Public-key_cryptography). To validate the signature we need a [public key](https://en.wikipedia.org/wiki/Public_key_infrastructure).  
+Next we have to tell the gateway where to retrieve this public key from (it is the Spring Authorization Server that provides this at a publicly accessible endpoint as part of a [JSON Web Key Set](https://auth0.com/docs/secure/tokens/json-web-tokens/json-web-key-sets)).
 
 Please open the file `src/main/resources/application.yml` in the _/lab3/initial/api-gateway_ project and add the following entries on the level of the _spring_ path:
 
-application.yml:
+__application.yml:__
 
 ```yaml
 spring:
@@ -133,11 +134,15 @@ spring:
           jwk-set-uri: http://localhost:9000/oauth2/jwks
 ```
 
-This defines to load the required public key from [localhost:9000/oauth2/jwks](http://localhost:9000/oauth2/jwks).
+This defines to load the required public key from [localhost:9000/oauth2/jwks](http://localhost:9000/oauth2/jwks).  
 
-Finally, we need some java configuration to enable the authentication for bearer tokens (requiring JWT).
+> __Note:__  
+> Spring Security also caches all retrieved public keys. As long as the key id (header value _kid_) of a JWT matches the key id of a cached public key, then the token can directly be validated with this cached one.  
+> If no matching public key is found in the cache then Spring Security connects the Spring Authorization Server again to load public key(s) and invalidate the current cached ones.
 
-WebSecurityConfiguration.java
+Finally, we need some java configuration in the `WebSecurityConfiguration` class to enable the authentication for bearer tokens (requiring JWT).
+
+__WebSecurityConfiguration.java:__
 
 ```java
 package com.example.apigateway.security;
@@ -179,7 +184,7 @@ public class WebSecurityConfiguration {
 }
 ```
 
-To get more logging infos for the JWT authentication part (especially when things don't work as expected) you can set the log level to _TRACE_ for spring security with ` org.springframework.security: TRACE`.
+To get more logging infos for the JWT authentication part (especially when things don't work as expected) you can set the log level to `TRACE` for spring security with ` org.springframework.security: TRACE`.
 
 __application.yml:__
 
@@ -193,14 +198,13 @@ logging:
     org.springframework.security: TRACE
 ```
 
-
 ### Step 2: Re-configure the rate limiter of lab 2
 
-As we now have a Principal (authenticated user) it is now possible to use the default `PrincipalNameKeyResolver` implementation of spring cloud gateway.
+As we now have a Principal (authenticated user) it is possible to use the default `PrincipalNameKeyResolver` implementation of Spring Cloud Gateway.
 
-So let's remove the reference to our own key resolver implementation (again in the 'application.yml' file):
+So let's remove the reference to our own key resolver implementation (again in the `application.yml` file):
 
-application.yml:
+__application.yml:__
 
 ```yaml
 spring:

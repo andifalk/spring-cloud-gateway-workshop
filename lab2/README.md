@@ -1,9 +1,9 @@
 # Lab 2: Resilience - Retry, Circuit Breaking and Rate Limiting
 
-In the second lab we add [resilience design patterns](https://www.codecentric.de/wissens-hub/blog/resilience-design-patterns-retry-fallback-timeout-circuit-breaker) to the gateway.
+In the second lab we will add [resilience design patterns](https://www.codecentric.de/wissens-hub/blog/resilience-design-patterns-retry-fallback-timeout-circuit-breaker) to the gateway.
 
 > **Info:**   
-> See [Spring Cloud Gateway Retry](https://docs.spring.io/spring-cloud-gateway/docs/current/reference/html/#the-retry-gatewayfilter-factory),[Spring Cloud Gateway CircuitBreaker](https://docs.spring.io/spring-cloud-gateway/docs/current/reference/html/#spring-cloud-circuitbreaker-filter-factory) and [Spring Cloud Gateway RequestRateLimiter](https://docs.spring.io/spring-cloud-gateway/docs/current/reference/html/#the-requestratelimiter-gatewayfilter-factory)
+> See [Spring Cloud Gateway Retry](https://docs.spring.io/spring-cloud-gateway/docs/current/reference/html/#the-retry-gatewayfilter-factory), [Spring Cloud Gateway CircuitBreaker](https://docs.spring.io/spring-cloud-gateway/docs/current/reference/html/#spring-cloud-circuitbreaker-filter-factory) and [Spring Cloud Gateway RequestRateLimiter](https://docs.spring.io/spring-cloud-gateway/docs/current/reference/html/#the-requestratelimiter-gatewayfilter-factory)
 > for all details on how to configure the corresponding resilience patterns.
 
 ## Lab Contents
@@ -18,13 +18,17 @@ In the second lab we add [resilience design patterns](https://www.codecentric.de
 
 ## Learning Targets
 
-Productive software has to deliver quality attributes, i.e. it has to be functional correct, reliable, and available.
+Productive software has to deliver quality attributes, i.e. it has to be functional correct, reliable, performant, secure, and available (see [ISO/IEC 25010](https://iso25000.com/index.php/en/iso-25000-standards/iso-25010) for more details on software quality).
+
 When it comes to resilience in software design, the main goal is build robust components that can tolerate faults within their scope, but also failures of other components they depend on.
-In this lab we take a look at some resilience design patterns: Retry, circuit breaker with fallback and rate limiting.
+In this lab we take a look at some resilience design patterns: 
+* Retry
+* Circuit Breaker with fallback strategy
+* Rate Limiting
 
 In lab 2 you will learn how to:
 
-* Add the __Retry__ feature to a request, that is calling a special endpoint in the customer service which is randomly failing
+* Add the __Retry__ pattern to a request, that is calling a special endpoint in the customer service which is implemented to fail randomly
 * Configure a [Circuit Breaker](https://dev.to/silviobuss/resilience-pattern-for-java-microservices-the-circuit-breaker-b2g) for calling the customer-service including a __Fallback__ when the call is failing
 * Configure a [rate limiter](https://www.cloudflare.com/en-gb/learning/bots/what-is-rate-limiting/) to restrict the amount of requests that can be executed in a certain amount of time.
 
@@ -41,18 +45,20 @@ Now, let's start with this lab.
 
 ### Explore the initial application
 
-Please navigate your Java IDE to the __lab2/initial/api-gateway__ project and explore this project a bit. Then start the application by running the class `com.example.apigateway.ApiGatewayApplication` inside your IDE or by issuing a `mvnw[.sh|.cmd] spring-boot:run` command.
+Please navigate your Java IDE to the __lab2/initial/api-gateway__ project and explore this project a bit. Then start the application by running the class `com.example.apigateway.ApiGatewayApplication` inside your IDE  
+or by issuing a `mvnw[.sh|.cmd] spring-boot:run` command.
 
-If you have not yet seen the sample application architecture we will be building starting with this lab then please look into the [sample application architecture](../architecture).
+If you have not yet seen the sample application architecture we will be building then please have a look into the [sample application architecture](../architecture).
 
 For this lab we will also need the two provided sample backend services that you can find in the _microservices_ root folder:
 
-* product-service: Provides a REST API for products
-* customer-service: Provides a REST API for customers
+* __product-service__: Provides a REST API for products
+* __customer-service__: Provides a REST API for customers
 
-To test if the backend microservice applications works as expected, please run the corresponding spring boot starter classes and check if you can access the following REST API endpoints via the browser or the provided postman collection in _/setup/postman_:
+To test if the backend microservice applications work as expected, please run the corresponding spring boot starter classes and check if you can access the following REST API endpoints via the browser or the provided postman collection in _/setup/postman_:
 
-* [localhost:9092/api/v1/products](http://localhost:9091/api/v1/customers)
+* [localhost:9091/api/v1/customers](http://localhost:9091/api/v1/customers)
+* [localhost:9091/api/v2/customers](http://localhost:9091/api/v2/customers)
 * [localhost:9092/api/v1/products](http://localhost:9092/api/v1/products)
 
 You may also use a command-line client as well.
@@ -74,19 +80,19 @@ curl http://localhost:9092/api/v1/products
 
 ### Step 1: Retry the request call to the customer-service
 
-Whenever we assume that an unexpected response (i.e. for a non-reliable service) can be fixed by sending the request again, using the retry pattern can help. It is a very simple pattern where failed requests are retried a configurable number of times in case of a failure before the operation is marked as a failure.
+Whenever we assume that an unexpected response (i.e. for a non-reliable service) can be fixed by sending the request again, using the _retry_ pattern can help. It is a very simple pattern where failed requests are retried a configurable number of times in case of a failure before the operation is marked as a failure.
 
-In this step we will try the retry feature with a special API endpoint at http://localhost:9091/api/v1/customers/retry of the customer service that is randomly returning one of the following http status values:
+In this step we will use the _retry_ feature with a special API endpoint at [http://localhost:9091/api/v1/customers/retry](http://localhost:9091/api/v1/customers/retry) of the customer service that is randomly returning one of the following http status values:
 
 * 200 (OK)
 * 400 (Bad Request)
 * 500 (Internal Server Error)
 
-So we will add a new route with the _Retry_ filter.
+Next, we will add a new route including the _Retry_ filter.
 
 Please open the file `src/main/resources/application.yml` in the _/lab2/initial/api-gateway_ project and add the following entries at the end of the _routes_ path:
 
-application.yml:
+__application.yml:__
 
 ```yaml
 spring:
@@ -117,15 +123,15 @@ This defines a route from [localhost:9090/api/v1/customers/retry (gateway)](http
 
 The retry filter is configured as follows:
 
-* retries: The number of retries that should be attempted. Here it is tried 5 times.
-* statuses: The HTTP status codes that should be retried, her only 400 (Bad request) and 500 (Internal server error) is retried
-* methods: The HTTP methods that should be retried, we only want GET requests to be retried.
-* backoff: The configured exponential backoff for the retries. Retries are performed after a backoff interval of `firstBackoff * (factor ^ n)`, where _n_ is the iteration. If _maxBackoff_ is configured, the maximum backoff applied is limited to _maxBackoff_. If _basedOnPreviousValue_ is `true`, the _backoff_ is calculated by using `prevBackoff * factor`.
+* __retries__: The number of retries that should be attempted. In our scenario the request is tried to execute 5 times.
+* __statuses__: The HTTP status codes that should be retried, in our sample only `400 (Bad request)` and `500 (Internal server error)` is retried
+* __methods__: The HTTP methods that should be retried, we only want `GET` requests to be retried.
+* __backoff__: The configured exponential backoff for the retries. Retries are performed after a backoff interval of `firstBackoff * (factor ^ n)`, where _n_ is the iteration. If _maxBackoff_ is configured, the maximum backoff applied is limited to _maxBackoff_. If _basedOnPreviousValue_ is `true`, the _backoff_ is calculated by using `prevBackoff * factor`.
 
 Please see the [Retry GatewayFilter Factory docs](https://docs.spring.io/spring-cloud-gateway/docs/current/reference/html/#the-retry-gatewayfilter-factory) for full parameters description.
 
 Now (re-)start the api-gateway application and make sure you also have started the _customer-service_ microservice located in _/microservices/customer-service_.  
-Next, try to call the new route at http://localhost:9090/api/v1/customers/retry using either the web browser or the provided postman collection (corresponding request in folder _Resilience_)
+Next, try to call the new route at [http://localhost:9090/api/v1/customers/retry](http://localhost:9090/api/v1/customers/retry) using either the web browser or the provided postman collection (corresponding request in folder _Resilience_)
 
 In the logs of the api-gateway you will notice that it might have some entries for retrying to call the customer service because of error results. But the service call should be successful in the end.
 
@@ -144,36 +150,36 @@ The circuit breaker pattern was described by [Martin Fowler](https://martinfowle
 
 We will now configure a circuit breaker for the routing to the customer service, including both API versions:
 
-* http://localhost:9091/api/v1/customers
-* http://localhost:9091/api/v2/customers
+* [http://localhost:9091/api/v1/customers](http://localhost:9091/api/v1/customers)
+* [http://localhost:9091/api/v2/customers](http://localhost:9091/api/v2/customers)
 
-The circuit breaker in the spring cloud gateway is implemented using the [Resilience4J library](https://resilience4j.readme.io/docs/circuitbreaker).
-So we have to add the corresponding dependencies to the maven _pom.xml_ file:
+The circuit breaker in the spring cloud gateway is implemented using the [Resilience4J library](https://resilience4j.readme.io/docs/circuitbreaker).  
+So we have to add the corresponding dependencies to the maven `pom.xml` file:
 
-pom.xml
+__pom.xml:__
 
 ```xml
 <dependencies>
     ...
     <dependency>
-		<groupId>org.springframework.cloud</groupId>
-		<artifactId>spring-cloud-starter-circuitbreaker-reactor-resilience4j</artifactId>
-	</dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-circuitbreaker-reactor-resilience4j</artifactId>
+    </dependency>
     <dependency>
-        <groupId>io.github.resilience4j</groupId>
-        <artifactId>resilience4j-micrometer</artifactId>
+      <groupId>io.github.resilience4j</groupId>
+      <artifactId>resilience4j-micrometer</artifactId>
     </dependency>
     ...
 </dependencies>
 ```
 
-We also added a dependency that introduces a corresponding metric for the Resilience4J circuit breaker.
-With this all circuit breaker events can be monitored at http://localhost:9090//actuator/circuitbreakerevents.
+We also have added a dependency that introduces a corresponding metric for the _Resilience4J_ circuit breaker.
+With this all circuit breaker events can be monitored at [http://localhost:9090//actuator/circuitbreakerevents](http://localhost:9090//actuator/circuitbreakerevents).
 
 After ensuring all prerequisites are now met we can configure the circuit breaker.
 Open the file `src/main/resources/application.yml` in the _/lab2/initial/api-gateway_ project and add the following entries in the filters list of the route entry with the _customers_ id:
 
-application.yml:
+__application.yml:__
 
 ```yaml
 spring:
@@ -198,11 +204,11 @@ Now a circuit breaker is configured as filter for these routes:
 * From [localhost:9090/api/v1/customers (gateway)](http://localhost:9090/api/v1/customers)  to [localhost:9091/api/v1/customers (customer-service)](http://localhost:9091/api/v1/customers)
 * From [localhost:9090/api/v2/customers (gateway)](http://localhost:9090/api/v2/customers)  to [localhost:9091/api/v2/customers (customer-service)](http://localhost:9091/api/v2/customers)
 
-Before we can try the circuit breaker we still have to implement the endpoint for the configured circuit breaker fallback in the api gateway at http://localhost:9090/customer-fallback.
+Before we can try the circuit breaker we still have to implement the endpoint for the configured circuit breaker fallback in the api gateway at [http://localhost:9090/customer-fallback](http://localhost:9090/customer-fallback).
 
 Create the new class `FallbackApi` in the package `com.example.apigateway.resilience` with the following implementation:
 
-FallbackApi.java
+__FallbackApi.java:__
 
 ```java
 package com.example.apigateway.resilience;
@@ -223,12 +229,17 @@ public class FallbackApi {
 }
 ```
 
-Her we just have implemented a very simple fallback just informing consumers of the application of a temporary service outage.
+Her we have implemented a very simple fallback just informing consumers of the application of a temporary service outage. Other possible solutions would be to cache a previous result.
 
-Now (re-)start the api-gateway application and make sure you also have started the _customer-service_ microservice located in _/microservices/customer-service_.
-Next try to call the route at http://localhost:9090/api/v1/customers or http://localhost:9090/api/v2/customers using either the web browser or the provided postman collection (corresponding requests in folder _routing_). This should work fine with returning the list of customers.  
-Now please stop the customer service and try again to call the same requests above. This time the circuit breaker kicks in and the fallback API gets called. So you should see the message above instead.
-After restarting the customer service again the call should work fine again, and you should see the customer list.
+Now (re-)start the api-gateway application and make sure you also have started the _customer-service_ microservice located in _/microservices/customer-service_.  
+Next try to call the route at http://localhost:9090/api/v1/customers or http://localhost:9090/api/v2/customers using either the web browser or the provided postman collection (corresponding requests in folder _routing_). This should still work fine as before with returning the list of customers.
+
+Now please stop the _customer service_ and try again to call the same requests above. This time the circuit breaker kicks in and the fallback API gets called. So you should see the message of the implemented fallback API endpoint above instead.  
+After restarting the _customer service_ again the call should work fine again, and you should see the customer list.
+
+Finally, you may check all circuit breaker events at [http://localhost:9090//actuator/circuitbreakerevents](http://localhost:9090//actuator/circuitbreakerevents).
+
+Next up: Rate limiting.
 
 ### Step 3: Configure a rate limiter
 
@@ -240,14 +251,14 @@ A rate limiter can support in achieving the following features:
   * DoS and DDoS attacks
 * Limit the number of requests according to a pricing model  
 
-If a request is blocked by the limiter then the response `HTTP 429 - Too Many Requests` is sent.
+If a request is blocked by the limiter then the response `HTTP 429 - Too Many Requests` is sent instead of a `HTTP 200 - OK` status.
 
 The standard rate limiter implementation of the spring cloud gateway is the [Redis](https://redis.io/) rate limiter.
 That is why a [Redis](https://redis.io/) database is required.
 
-First, we have to add another dependency to the maven _pom.xml_ file:
+First, we have to add another dependency to the maven `pom.xml` file:
 
-pom.xml
+__pom.xml:__
 
 ```xml
 <dependencies>
@@ -269,9 +280,12 @@ Now open a terminal window and navigate to the _lab2/initial_ folder and issue t
 docker compose up
 ```
 
-So let's do this (again in the 'application.yml' file):
+If this does not work as expected, please re-check that there is the _docker-compose.yml_ file in the current directory.
 
-application.yml:
+The final step is the configuration of the rate limiter.  
+So let's do this (again in the `application.yml` file):
+
+__application.yml:__
 
 ```yaml
 spring:
@@ -305,12 +319,12 @@ The rate limiter defines the following properties:
 
 > See [RequestRateLimiter reference doc](https://docs.spring.io/spring-cloud-gateway/docs/current/reference/html/#the-requestratelimiter-gatewayfilter-factory) for more details.
 
-As we don't have a Principal (authenticated user) yet (see next lab) it is not possible to use the default `PrincipalNameKeyResolver` implementation of spring cloud gateway.
+As we don't have a Principal (authenticated user) yet (see next lab) it is not possible to use the default `PrincipalNameKeyResolver` implementation of spring cloud gateway.  
 Instead, we provide our own simple implementation, limiting the requests based on the request origin address. Our custom resolver is set as bean reference in the configuration above.
 
 Here you find the implementation. Please create a new class `ProductKeyResolver` in the package `com.example.apigateway.resilience`.
 
-ProductKeyResolver.java
+__ProductKeyResolver.java:__
 
 ```java
 package com.example.apigateway.resilience;
@@ -336,14 +350,14 @@ public class ProductKeyResolver implements KeyResolver {
 }
 ```
 
-Now (re-)start the api-gateway application and make sure you still have started the _product-service_ microservice located in _/microservices/product-service_.
-Next try to call the new route at http://localhost:9090/api/v1/products using either the web browser or the provided postman collection (corresponding request in folder _routing_).
+Now (re-)start the api-gateway application and make sure you still have started the _product-service_ microservice located in _/microservices/product-service_.  
+Next try to call the new route at [http://localhost:9090/api/v1/products](http://localhost:9090/api/v1/products) using either the web browser or the provided postman collection (corresponding request in folder _Routing_).
 
 To test the rate limiter you need a mechanism to create multiple requests in short time. You won't reach the maximum number of possible requests by manually executing requests in the browser or from postman.  
 You may use one of these client tools:
 
-* Apache Bench: On Linux and macOS operating systems you may use [Apache Bench (ab)](https://httpd.apache.org/docs/2.4/programs/ab.html). This is a tool from the Apache organization for benchmarking a Hypertext Transfer Protocol (HTTP) web server. With this tool, you can quickly know how many requests per second your web server is capable of serving.
-* Rate Limiter Client: This workshop also provides a simple client to issue multiple requests to the product service. You find the project for the Rate Limiter Client [here](../rate-limiter-client/README.md)
+* __Apache Bench__: On Linux and macOS operating systems you may use [Apache Bench (ab)](https://httpd.apache.org/docs/2.4/programs/ab.html). This is a tool from the Apache organization for benchmarking a Hypertext Transfer Protocol (HTTP) web server. With this tool, you can quickly know how many requests per second your web server is capable of serving.
+* __Rate Limiter Client__: This workshop also provides a simple client to issue multiple requests to the product service. You find the project for the Rate Limiter Client in the directory _/rate-limiter-client_).
 
 With Apache Bench you can try to perform this command:
 
@@ -391,7 +405,7 @@ public class WebClientConfiguration {
 ```
 
 Independent of the client you are using, if you increase the number of requests, then at some point you will recognize 
-that you get the HTTP status of 429(Too Many Requests) instead of the 200(OK) HTTP status.
+that you get the HTTP status of `429(Too Many Requests)` instead of the `200(OK)` HTTP status.
 
 <hr>
 

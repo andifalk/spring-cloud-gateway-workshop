@@ -371,7 +371,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:9096/api/rate?requests=2&delay=0",
+							"raw": "http://localhost:9096/api/rate?requests=20&delay=50",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -384,11 +384,11 @@
 							"query": [
 								{
 									"key": "requests",
-									"value": "2"
+									"value": "20"
 								},
 								{
 									"key": "delay",
-									"value": "0"
+									"value": "50"
 								}
 							]
 						}
@@ -552,6 +552,25 @@
 					"response": []
 				},
 				{
+					"name": "Customers List (V1) Direct Call",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{customer_service_base_url}}/api/v1/customers",
+							"host": [
+								"{{customer_service_base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Customers (Canary Release)",
 					"request": {
 						"method": "GET",
@@ -601,6 +620,25 @@
 								"api",
 								"v2",
 								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Non_Premium Products List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{product_service_base_url}}/api/v1/products",
+							"host": [
+								"{{product_service_base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"products"
 							]
 						}
 					},

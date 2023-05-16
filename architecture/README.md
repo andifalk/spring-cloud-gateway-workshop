@@ -34,6 +34,8 @@ After importing the project into your IDE you should see a project structure lik
 
 The main contents for this workshop consist of the following directories:
 
+* __rate-limiter-client__:
+  In addition to the components of the sample architecture there is also a helper client provided for testing the rate limiter in lab 2. You find this tool in this directory.
 * __reactive-playground__:
   In this subdirectory you find a demo application that provides a unit test class with lots of examples on implementing reactive streams using project reactor.
 * __microservices__:
@@ -47,7 +49,7 @@ The main contents for this workshop consist of the following directories:
     * __solution__: This is the reference solution for this workshop (please do NOT look into this now)
         - api-gateway: This is the reference solution of the corresponding lab for the spring cloud gateway microservice
 
-> **Note:** Lab 5 also contains the product-service microservice as part of the _initial_ and _solution_ folders. This is required as part of the secure communication topic of lab5.
+> **Note:** Lab 4 also contains the product-service microservice as part of the _initial_ and _solution_ folders. This is required as part of the secure communication topic of lab 4.
 
 > **Info:** You can find more information on building OAuth 2.0/OIDC secured microservices with spring in
 [Spring Boot Reference Documentation](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-security-oauth2)

@@ -339,6 +339,59 @@ public class ProductKeyResolver implements KeyResolver {
 Now (re-)start the api-gateway application and make sure you still have started the _product-service_ microservice located in _/microservices/product-service_.
 Next try to call the new route at http://localhost:9090/api/v1/products using either the web browser or the provided postman collection (corresponding request in folder _routing_).
 
+To test the rate limiter you need a mechanism to create multiple requests in short time. You won't reach the maximum number of possible requests by manually executing requests in the browser or from postman.  
+You may use one of these client tools:
+
+* Apache Bench: On Linux and macOS operating systems you may use [Apache Bench (ab)](https://httpd.apache.org/docs/2.4/programs/ab.html). This is a tool from the Apache organization for benchmarking a Hypertext Transfer Protocol (HTTP) web server. With this tool, you can quickly know how many requests per second your web server is capable of serving.
+* Rate Limiter Client: This workshop also provides a simple client to issue multiple requests to the product service. You find the project for the Rate Limiter Client [here](../rate-limiter-client/README.md)
+
+With Apache Bench you can try to perform this command:
+
+```shell
+ab -c 2 -m GET -n 10 -v 3 http://localhost:9090/api/v1/products
+```
+
+This executes 2 concurrent requests at a time (-c 2), uses the GET HTTP method (-m GET), issues 10 requests (-n 10) and sets a verbose level of `3` to receive HTTP status results.
+
+If you cannot install the Apache Bench tool then you may use the _rate-limiter-client_ as an alternative.  
+Navigate to the directory _/rate-limiter-client_ and start the class `com.example.client.RateLimiterClientApplication`.
+
+This provides one simple API endpoint:
+
+[http://localhost:9096/api/rate?requests=2&delay=10](http://localhost:9096/api/rate?requests=2&delay=10)
+
+The API requires the following request parameters:
+
+* __requests__: The number of requests to be triggered
+* __delay__: The delay to wait between requests (in milliseconds), when `0` is given then no delay is configured
+
+## Configuration
+
+You may configure the base URI and a JWT bearer token in the class `WebClientConfiguration`:
+
+```java
+package com.example.client;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.reactive.function.client.WebClient;
+
+@Configuration
+public class WebClientConfiguration {
+
+    @Bean
+    public WebClient webClient() {
+        return WebClient
+                .builder()
+                .baseUrl("http://localhost:9090")
+                //.defaultHeader("Authorization", "Bearer <JWT>")
+                .build();
+    }
+}
+```
+
+Independent of the client you are using, if you increase the number of requests, then at some point you will recognize 
+that you get the HTTP status of 429(Too Many Requests) instead of the 200(OK) HTTP status.
 
 <hr>
 

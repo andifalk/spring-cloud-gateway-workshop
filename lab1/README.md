@@ -51,6 +51,16 @@ Now, let's start with this lab.
 
 ### Explore the initial application
 
+Starting a new project using the Spring Cloud Gateway is very easy. Usually just go to [https://start.spring.io](https://start.spring.io) and select the following dependencies:
+
+* Gateway (This adds all required Spring Cloud and Spring Cloud Gateway components)
+* Spring Boot DevTools (To speed up development cycle times)
+* Spring Boot Actuator (To verify configured gateway routes and provide some metrics)
+
+![Spring Initializr](images/spring_inizializr_initial_gateway.png)
+
+To speed things further up this project has already been created for you.
+
 Please navigate your Java IDE to the __lab1/initial/api-gateway__ project and explore this project a bit. Then start the application by running the class `com.example.apigateway.ApiGatewayApplication` inside your IDE  
 or by issuing a `mvnw[.sh|.cmd] spring-boot:run` command.
 

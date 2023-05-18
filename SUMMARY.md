@@ -8,6 +8,7 @@
 * [Requirements and Setup](setup/README.md)
 * [Introduction to Spring Cloud Gateway](introduction/README.md)
 * [Sample Application Architecture](architecture/README.md)
+* [Provided Backend Microservices](microservices/README.md)
 
 ## Intro Lab
 

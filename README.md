@@ -27,6 +27,7 @@ The sample application architecture you will build (and use) looks like this:
 * [Requirements and Setup](setup/README.md)
 * [Introduction to Spring Cloud Gateway](introduction/README.md)
 * [Sample Application Architecture](architecture/README.md)
+* [Provided Backend Microservices](microservices/README.md)
 
 ## Hands-On Workshop
 

@@ -1,3 +1,4 @@
+[![Java CI](https://github.com/andifalk/spring-cloud-gateway-workshop/actions/workflows/maven.yml/badge.svg)](https://github.com/andifalk/spring-cloud-gateway-workshop/actions/workflows/maven.yml)
 # Microservices on the Edge with Spring Cloud Gateway (Hands-On Workshop)
 
 A hands-on workshop to build an API-Gateway using the [Spring Cloud Gateway](https://spring.io/projects/spring-cloud-gateway).

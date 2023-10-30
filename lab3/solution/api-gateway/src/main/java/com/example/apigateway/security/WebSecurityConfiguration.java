@@ -10,6 +10,8 @@ import org.springframework.security.config.web.server.ServerHttpSecurity.OAuth2R
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.util.matcher.PathPatternParserServerWebExchangeMatcher;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 @Profile("resource-server")
 @Configuration
 @EnableWebFluxSecurity
@@ -32,8 +34,8 @@ public class WebSecurityConfiguration {
                 .authorizeExchange((exchanges) -> exchanges
                         .anyExchange().authenticated()
                 )
-                .oauth2ResourceServer(OAuth2ResourceServerSpec::jwt)
-                .csrf().disable();
+                .oauth2ResourceServer(oauth -> oauth.jwt(withDefaults()))
+                .csrf(ServerHttpSecurity.CsrfSpec::disable);
         return http.build();
     }
 }

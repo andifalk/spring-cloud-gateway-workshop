@@ -5,7 +5,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer.HstsConfig;
 import org.springframework.security.web.SecurityFilterChain;
+
+import static org.springframework.security.config.Customizer.withDefaults;
 
 @EnableWebSecurity
 @Configuration
@@ -15,9 +18,9 @@ public class WebSecurityConfiguration {
     @Bean
     public SecurityFilterChain apiSecurity(HttpSecurity httpSecurity) throws Exception {
          httpSecurity
-                .headers(header -> header.httpStrictTransportSecurity().disable())
-                .authorizeHttpRequests().anyRequest().authenticated()
-                .and().oauth2ResourceServer().jwt();
+                .headers(header -> header.httpStrictTransportSecurity(HstsConfig::disable))
+                 .authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated())
+                 .oauth2ResourceServer(oauth -> oauth.jwt(withDefaults()));
          return httpSecurity.build();
     }
 
@@ -25,9 +28,9 @@ public class WebSecurityConfiguration {
     @Bean
     public SecurityFilterChain apiSecurityUnAuthenticated(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-                .headers(header -> header.httpStrictTransportSecurity().disable())
-                .authorizeHttpRequests().anyRequest().permitAll()
-                .and().oauth2ResourceServer().jwt();
+                .headers(header -> header.httpStrictTransportSecurity(HstsConfig::disable))
+                .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
+                .oauth2ResourceServer(oauth -> oauth.jwt(withDefaults()));
         return httpSecurity.build();
     }
 }

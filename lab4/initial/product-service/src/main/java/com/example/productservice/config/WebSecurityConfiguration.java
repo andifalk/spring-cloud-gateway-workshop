@@ -7,6 +7,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 @EnableWebSecurity
 @Configuration
 public class WebSecurityConfiguration {
@@ -15,8 +17,8 @@ public class WebSecurityConfiguration {
     @Bean
     public SecurityFilterChain apiSecurity(HttpSecurity httpSecurity) throws Exception {
          httpSecurity
-                .authorizeHttpRequests().anyRequest().authenticated()
-                .and().oauth2ResourceServer().jwt();
+                .authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated())
+                .oauth2ResourceServer(oauth -> oauth.jwt(withDefaults()));
          return httpSecurity.build();
     }
 
@@ -24,8 +26,8 @@ public class WebSecurityConfiguration {
     @Bean
     public SecurityFilterChain apiSecurityUnAuthenticated(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-                .authorizeHttpRequests().anyRequest().permitAll()
-                .and().oauth2ResourceServer().jwt();
+                .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
+                .oauth2ResourceServer(oauth -> oauth.jwt(withDefaults()));
         return httpSecurity.build();
     }
 }

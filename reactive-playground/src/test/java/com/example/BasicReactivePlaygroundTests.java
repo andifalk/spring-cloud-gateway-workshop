@@ -24,7 +24,7 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Basic reactive playground")
-//@Tag("manual")
+@Tag("manual")
 class BasicReactivePlaygroundTests {
 
   private static final Logger log = LoggerFactory.getLogger(BasicReactivePlaygroundTests.class);

@@ -86,11 +86,13 @@ In this step we will use the _retry_ feature with a special API endpoint at [htt
 
 * 200 (OK)
 * 400 (Bad Request)
+* 408 (Request Timeout)
 * 500 (Internal Server Error)
+* 503 (Service Unavailable)
 
 Next, we will add a new route including the _Retry_ filter.
 
-Please open the file `src/main/resources/application.yml` in the _/lab2/initial/api-gateway_ project and add the following entries at the end of the _routes_ path:
+Please open the file `src/main/resources/application.yml` in the _/lab2/initial/api-gateway_ project and add the following entries at the end of the `routes` path:
 
 __application.yml:__
 
@@ -110,7 +112,7 @@ spring:
             - name: Retry
               args:
                 retries: 5
-                statuses: BAD_REQUEST, INTERNAL_SERVER_ERROR
+                statuses: REQUEST_TIMEOUT, SERVICE_UNAVAILABLE
                 methods: GET
                 backoff:
                   firstBackoff: 10ms
@@ -124,7 +126,7 @@ This defines a route from [localhost:9090/api/v1/customers/retry (gateway)](http
 The retry filter is configured as follows:
 
 * __retries__: The number of retries that should be attempted. In our scenario the request is tried to execute 5 times.
-* __statuses__: The HTTP status codes that should be retried, in our sample only `400 (Bad request)` and `500 (Internal server error)` is retried
+* __statuses__: The HTTP status codes that should be retried, in our sample only `408 (REQUEST_TIMEOUT)` and `503 SERVICE_UNAVAILABLE)` is retried
 * __methods__: The HTTP methods that should be retried, we only want `GET` requests to be retried.
 * __backoff__: The configured exponential backoff for the retries. Retries are performed after a backoff interval of `firstBackoff * (factor ^ n)`, where _n_ is the iteration. If _maxBackoff_ is configured, the maximum backoff applied is limited to _maxBackoff_. If _basedOnPreviousValue_ is `true`, the _backoff_ is calculated by using `prevBackoff * factor`.
 
@@ -138,7 +140,7 @@ In the logs of the api-gateway you will notice that it might have some entries f
 ```shell
 o.s.c.g.f.f.RetryGatewayFilterFactory    : setting new iteration in attr 0
 o.s.c.g.f.f.RetryGatewayFilterFactory    : exceedsMaxIterations false, iteration 0, configured retries 5
-o.s.c.g.f.f.RetryGatewayFilterFactory    : retryableStatusCode: true, statusCode 400 BAD_REQUEST, configured statuses [400 BAD_REQUEST, 500 INTERNAL_SERVER_ERROR], configured series [SERVER_ERROR]
+o.s.c.g.f.f.RetryGatewayFilterFactory    : retryableStatusCode: true, statusCode 503 SERVICE_UNAVAILABLE, configured statuses [403 REQUEST_TIMEOUT, 503 SERVICE_UNAVAILABLE], configured series [SERVER_ERROR]
 o.s.c.g.f.f.RetryGatewayFilterFactory    : retryableMethod: true, httpMethod GET, configured methods [GET]
 o.s.c.g.f.f.RetryGatewayFilterFactory    : disposing response connection before next iteration
 ```
@@ -357,7 +359,7 @@ To test the rate limiter you need a mechanism to create multiple requests in sho
 You may use one of these client tools:
 
 * __Apache Bench__: On Linux and macOS operating systems you may use [Apache Bench (ab)](https://httpd.apache.org/docs/2.4/programs/ab.html). This is a tool from the Apache organization for benchmarking a Hypertext Transfer Protocol (HTTP) web server. With this tool, you can quickly know how many requests per second your web server is capable of serving.
-* __Rate Limiter Client__: This workshop also provides a simple client to issue multiple requests to the product service. You find the project for the Rate Limiter Client in the directory _/rate-limiter-client_).
+* __Rate Limiter Client__: This workshop also provides a simple client to issue multiple requests to the product service. You find the project for the Rate Limiter Client in the directory _/rate-limiter-client_.
 
 With Apache Bench you can try to perform this command:
 
@@ -366,6 +368,12 @@ ab -c 2 -m GET -n 10 -v 3 http://localhost:9090/api/v1/products
 ```
 
 This executes 2 concurrent requests at a time (-c 2), uses the GET HTTP method (-m GET), issues 10 requests (-n 10) and sets a verbose level of `3` to receive HTTP status results.
+
+You could also use [Locust](https://github.com/locustio/locust) for this.
+If you already have installed python3 then you just have to perform a `pip install locust` to install locust.
+
+Then use the provided file `locustfile.py` and run `locust -f locustfile.py`
+In the [Locust web UI](http://0.0.0.0:8089/) specify the target server http://localhost:9090 of the gateway.
 
 If you cannot install the Apache Bench tool then you may use the _rate-limiter-client_ as an alternative.  
 Navigate to the directory _/rate-limiter-client_ and start the class `com.example.client.RateLimiterClientApplication`.

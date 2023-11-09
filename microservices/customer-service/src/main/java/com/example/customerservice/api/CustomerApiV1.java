@@ -30,7 +30,9 @@ public class CustomerApiV1 {
         statusCodes = new HashSet<>();
         statusCodes.add(HttpStatusCode.valueOf(200));
         statusCodes.add(HttpStatusCode.valueOf(400));
+        statusCodes.add(HttpStatusCode.valueOf(408));
         statusCodes.add(HttpStatusCode.valueOf(500));
+        statusCodes.add(HttpStatusCode.valueOf(503));
 
         random = new Random();
     }
@@ -59,9 +61,9 @@ public class CustomerApiV1 {
     ResponseEntity<String> retryEndpoint() {
         HttpStatusCode httpStatusCode = randomStatus();
         if (HttpStatusCode.valueOf(200).isSameCodeAs(httpStatusCode)) {
-            return new ResponseEntity<>("Request Success", httpStatusCode);
+            return new ResponseEntity<>("Request Success: " + httpStatusCode, httpStatusCode);
         } else {
-            return new ResponseEntity<>("Request Failure", httpStatusCode);
+            return new ResponseEntity<>("Request Failure: " + httpStatusCode, httpStatusCode);
         }
     }
 

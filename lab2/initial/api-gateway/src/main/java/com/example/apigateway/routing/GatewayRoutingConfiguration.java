@@ -17,7 +17,7 @@ public class GatewayRoutingConfiguration {
                                 .addRequestHeader("X-MyRequestHeader", "my request"))
                                 .uri("https://httpbin.org"))
                 .route("redirect-spring-io", ps -> ps.path("/spring")
-                        .filters(f -> f.redirect(302, "https://springio.net"))
+                        .filters(f -> f.redirect(302, "https://spring.io"))
                         .uri("https://example.org"))
                 .build();
     }

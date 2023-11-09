@@ -314,7 +314,7 @@ public class GatewayRoutingConfiguration {
                             .addRequestHeader("X-MyRequestHeader", "my request"))
                     .uri("https://httpbin.org"))
             .route("redirect-spring-io", ps -> ps.path("/spring")
-                    .filters(f -> f.redirect(302, "https://springio.net"))
+                    .filters(f -> f.redirect(302, "https://spring.io"))
                     .uri("https://example.org"))
             .build();
   }
@@ -326,7 +326,7 @@ This configuration is just a standard spring configuration file using the common
 Here we are using the `RouteLocatorBuilder` to define routes.
 Each `route()` call also contains the route _id_, the _predicate_ path, the _URI_ and _filters_.
 The first route configuration entries define a call to a predefined public API endpoint at [https://httbin.org/get](https://httbin.org/get) with adding a request and a response header.
-In the second route a redirect is made to the [Spring I/O Conference](https://springio.net) website.
+In the second route a redirect is made to the [Spring](https://spring.io) website.
 
 Now (re-)start the api-gateway application again. The _customer-service_ microservice is not required anymore for this step.  
 Next try to call the new routes at [http://localhost:9090/get](http://localhost:9090/get) and [http://localhost:9090/spring](http://localhost:9090/spring) using either the web browser or the provided postman collection (corresponding request in _Routing_ folder) and see what is happening.

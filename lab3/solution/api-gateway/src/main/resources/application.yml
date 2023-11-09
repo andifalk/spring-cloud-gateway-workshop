@@ -50,7 +50,7 @@ spring:
             - name: Retry
               args:
                 retries: 5
-                statuses: BAD_REQUEST, INTERNAL_SERVER_ERROR
+                statuses: REQUEST_TIMEOUT, SERVICE_UNAVAILABLE
                 methods: GET
                 backoff:
                   firstBackoff: 10ms
